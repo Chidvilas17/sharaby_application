@@ -1,207 +1,362 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:sharaby_center_clinic/theme/app_colors.dart';
 import 'package:sharaby_center_clinic/widgets/app_drawer.dart';
+import 'package:sharaby_center_clinic/widgets/dashboard_card.dart';
+
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
-  Future<void> logout() async {
-    await FirebaseAuth.instance.signOut();
-  }
-
-  final List<_DashboardItem> items = const [
-    _DashboardItem(
-      icon: Icons.people,
-      title: "Patients",
-      subtitle: "Manage patient records",
-    ),
-    _DashboardItem(
-      icon: Icons.medication,
-      title: "Prescriptions",
-      subtitle: "Create prescriptions",
-    ),
-    _DashboardItem(
-      icon: Icons.description,
-      title: "Reports",
-      subtitle: "Medical reports",
-    ),
-    _DashboardItem(
-      icon: Icons.folder,
-      title: "Documents",
-      subtitle: "Patient documents",
-    ),
-    _DashboardItem(
-      icon: Icons.receipt_long,
-      title: "Billing",
-      subtitle: "Invoices & payments",
-    ),
-    _DashboardItem(
-      icon: Icons.settings,
-      title: "Settings",
-      subtitle: "Application settings",
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
-
     return Scaffold(
+      backgroundColor: AppColors.background,
       drawer: const AppDrawer(),
-      appBar: AppBar(
-        title: const Text("Sharaby Center"),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            tooltip: "Logout",
-            onPressed: logout,
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primaryContainer,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 28,
-                        child: Icon(
-                          Icons.local_hospital,
-                          size: 30,
+
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+
+              //================ HEADER =================
+              Container(
+                padding: const EdgeInsets.fromLTRB(20, 15, 20, 30),
+                decoration: const BoxDecoration(
+                  gradient: AppColors.headerGradient,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(35),
+                    bottomRight: Radius.circular(35),
+                  ),
+                ),
+                child: Column(
+                  children: [
+
+                    Row(
+                      children: [
+
+                        Builder(
+                          builder: (context) => IconButton(
+                            onPressed: () {
+                              Scaffold.of(context).openDrawer();
+                            },
+                            icon: const Icon(
+                              Icons.menu,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 16),
-                      Expanded(
-                        child: Text(
+
+                        const Spacer(),
+
+                        const Text(
                           "Sharaby Center",
                           style: TextStyle(
-                            fontSize: 24,
+                            color: Colors.white,
+                            fontSize: 22,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+
+                        const Spacer(),
+
+                        Stack(
+                          children: [
+                            const Icon(
+                              Icons.notifications_none,
+                              color: Colors.white,
+                              size: 30,
+                            ),
+                            Positioned(
+                              right: 0,
+                              child: Container(
+                                width: 10,
+                                height: 10,
+                                decoration: const BoxDecoration(
+                                  color: Colors.red,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+
+                    const SizedBox(height: 25),
+
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Good Morning 👋",
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 18,
+                        ),
                       ),
+                    ),
+
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Welcome Back Doctor",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    Container(
+                      height: 55,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: const TextField(
+                        decoration: InputDecoration(
+                          hintText: "Search patients...",
+                          border: InputBorder.none,
+                          prefixIcon: Icon(Icons.search),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              //================ HERO BANNER =================
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color(0xff5DA9FF),
+                        Color(0xff84C6FF),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: Row(
+                    children: [
+
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment:
+                          CrossAxisAlignment.start,
+                          children: [
+
+                            const Text(
+                              "Healthcare",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 26,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+
+                            const Text(
+                              "Management System",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 22,
+                              ),
+                            ),
+
+                            const SizedBox(height: 15),
+
+                            ElevatedButton(
+                              onPressed: () {},
+                              child: const Text("View Patients"),
+                            )
+                          ],
+                        ),
+                      ),
+
+                      const Icon(
+                        Icons.local_hospital,
+                        size: 90,
+                        color: Colors.white,
+                      )
                     ],
                   ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    "Welcome 👋",
+                ),
+              ),
+
+              const SizedBox(height: 25),
+
+              //================ STATISTICS =================
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  children: [
+
+                    DashboardCard(
+                      icon: Icons.people,
+                      title: "Patients",
+                      value: "254",
+                      onTap: () {},
+                    ),
+
+                    DashboardCard(
+                      icon: Icons.calendar_month,
+                      title: "Appointments",
+                      value: "18",
+                      onTap: () {},
+                    ),
+                  ],
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  children: [
+
+                    DashboardCard(
+                      icon: Icons.medication,
+                      title: "Prescriptions",
+                      value: "72",
+                      onTap: () {},
+                    ),
+
+                    DashboardCard(
+                      icon: Icons.receipt_long,
+                      title: "Billing",
+                      value: "\$18K",
+                      onTap: () {},
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              //================ QUICK ACTIONS =================
+
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Quick Actions",
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 6),
-                  Text(
-                    user?.email ?? "",
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(height: 6),
-                  const Text(
-                    "Clinic Management System",
-                    style: TextStyle(
-                      color: Colors.grey,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            Expanded(
-              child: GridView.builder(
-                itemCount: items.length,
-                gridDelegate:
-                const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 15,
-                  mainAxisSpacing: 15,
-                  childAspectRatio: 1,
                 ),
-                itemBuilder: (context, index) {
-                  final item = items[index];
-
-                  return InkWell(
-                    borderRadius: BorderRadius.circular(20),
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text("${item.title} module coming soon"),
-                        ),
-                      );
-                    },
-                    child: Card(
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CircleAvatar(
-                              radius: 28,
-                              backgroundColor: Theme.of(context)
-                                  .colorScheme
-                                  .primaryContainer,
-                              child: Icon(
-                                item.icon,
-                                size: 30,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                            ),
-                            const SizedBox(height: 15),
-                            Text(
-                              item.title,
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              item.subtitle,
-                              style: const TextStyle(
-                                color: Colors.grey,
-                                fontSize: 13,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
               ),
-            ),
-          ],
+
+              const SizedBox(height: 15),
+
+              Padding(
+                padding:
+                const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  mainAxisAlignment:
+                  MainAxisAlignment.spaceBetween,
+                  children: [
+
+                    _quick(Icons.people, "Patients"),
+
+                    _quick(Icons.medication, "Prescription"),
+
+                    _quick(Icons.receipt, "Billing"),
+
+                    _quick(Icons.bar_chart, "Reports"),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 30),
+
+              //================ APPOINTMENTS =================
+
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Today's Appointments",
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 15),
+
+              _appointment(
+                "Ahmed Ali",
+                "09:30 AM",
+                "Diabetes Follow-up",
+              ),
+
+              _appointment(
+                "Sara Mohamed",
+                "11:00 AM",
+                "Blood Pressure Check",
+              ),
+
+              const SizedBox(height: 30),
+            ],
+          ),
         ),
       ),
     );
   }
-}
 
-class _DashboardItem {
-  final IconData icon;
-  final String title;
-  final String subtitle;
+  static Widget _quick(IconData icon, String title) {
+    return Column(
+      children: [
+        CircleAvatar(
+          radius: 28,
+          backgroundColor: Colors.blue.shade100,
+          child: Icon(icon, color: Colors.blue),
+        ),
+        const SizedBox(height: 8),
+        Text(title),
+      ],
+    );
+  }
 
-  const _DashboardItem({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-  });
+  static Widget _appointment(
+      String patient,
+      String time,
+      String diagnosis,
+      ) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 18,
+        vertical: 6,
+      ),
+      child: Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18),
+        ),
+        child: ListTile(
+          leading: const CircleAvatar(
+            child: Icon(Icons.person),
+          ),
+          title: Text(patient),
+          subtitle: Text(diagnosis),
+          trailing: Text(
+            time,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
