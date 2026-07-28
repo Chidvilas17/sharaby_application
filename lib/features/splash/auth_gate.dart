@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import '../authentication/login_screen.dart';
-import '../dashboard/dashboard_screen.dart';
+import '../navigation/main_navigation_shell.dart';
 
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
@@ -12,7 +11,7 @@ class AuthGate extends StatelessWidget {
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
-        // Show loading while checking authentication
+        // Show loading while checking authentication state
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
             body: Center(
@@ -23,7 +22,7 @@ class AuthGate extends StatelessWidget {
 
         // User is logged in
         if (snapshot.hasData) {
-          return const DashboardScreen();
+          return const MainNavigationShell();
         }
 
         // User is not logged in
