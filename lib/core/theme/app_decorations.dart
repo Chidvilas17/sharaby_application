@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
-/// Reusable Glassmorphism & Shadow Decorations for Sharaby Center
+/// Reusable Glassmorphism & Glossy Soft Blue Shadows for Sharaby Center
 class AppDecorations {
   static BoxDecoration glassBoxDecoration({
     required bool isDark,
     double borderRadius = 20,
     Color? customColor,
     Border? border,
+    List<BoxShadow>? shadows,
   }) {
     return BoxDecoration(
       color: customColor ??
@@ -16,26 +17,33 @@ class AppDecorations {
       border: border ??
           Border.all(
             color: isDark
-                ? Colors.white.withValues(alpha: 0.1)
-                : Colors.white.withValues(alpha: 0.6),
+                ? AppColors.glassBorderDark
+                : AppColors.glassBorderLight,
             width: 1.5,
           ),
-      boxShadow: [
-        BoxShadow(
-          color: isDark
-              ? Colors.black.withValues(alpha: 0.3)
-              : AppColors.primary.withValues(alpha: 0.08),
-          blurRadius: 20,
-          spreadRadius: 2,
-          offset: const Offset(0, 8),
-        ),
-      ],
+      boxShadow: shadows ??
+          [
+            BoxShadow(
+              color: isDark
+                  ? Colors.black.withValues(alpha: 0.35)
+                  : AppColors.shadowBlue,
+              blurRadius: 24,
+              spreadRadius: 0,
+              offset: const Offset(0, 8),
+            ),
+            BoxShadow(
+              color: AppColors.glowBlue,
+              blurRadius: 12,
+              spreadRadius: -4,
+              offset: const Offset(0, 4),
+            ),
+          ],
     );
   }
 
   static BoxDecoration cardBoxDecoration({
     required bool isDark,
-    double borderRadius = 18,
+    double borderRadius = 20,
     Color? borderColor,
   }) {
     return BoxDecoration(
@@ -44,17 +52,17 @@ class AppDecorations {
       border: Border.all(
         color: borderColor ??
             (isDark
-                ? Colors.white.withValues(alpha: 0.05)
-                : const Color(0xFFE2E8F0)),
-        width: 1,
+                ? AppColors.glassBorderDark
+                : AppColors.glassBorderLight),
+        width: 1.2,
       ),
       boxShadow: [
         BoxShadow(
           color: isDark
-              ? Colors.black.withValues(alpha: 0.2)
-              : Colors.black.withValues(alpha: 0.04),
-          blurRadius: 15,
-          offset: const Offset(0, 4),
+              ? Colors.black.withValues(alpha: 0.25)
+              : AppColors.shadowBlue,
+          blurRadius: 18,
+          offset: const Offset(0, 6),
         ),
       ],
     );
@@ -71,9 +79,9 @@ class AppDecorations {
       boxShadow: shadows ??
           [
             BoxShadow(
-              color: AppColors.primary.withValues(alpha: 0.3),
-              blurRadius: 15,
-              offset: const Offset(0, 6),
+              color: AppColors.primary.withValues(alpha: 0.35),
+              blurRadius: 18,
+              offset: const Offset(0, 8),
             ),
           ],
     );

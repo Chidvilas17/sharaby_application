@@ -81,21 +81,27 @@ class _SignupScreenState extends State<SignupScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
+      backgroundColor: isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
       appBar: AppBar(
-        title: const Text("Staff Registration"),
+        title: const Text(
+          "Staff Registration",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
             child: Container(
               constraints: const BoxConstraints(maxWidth: 440),
               child: Column(
                 children: [
                   GlassCard(
-                    borderRadius: 24,
-                    padding: const EdgeInsets.all(24),
+                    borderRadius: 28,
+                    padding: const EdgeInsets.all(28),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -113,7 +119,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         Text(
                           "Register medical staff for Sharaby Center",
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 13.5,
                             color: isDark
                                 ? AppColors.textSecondaryDark
                                 : AppColors.textSecondaryLight,
@@ -124,10 +130,35 @@ class _SignupScreenState extends State<SignupScreen> {
                         // Role Selector
                         DropdownButtonFormField<UserRole>(
                           initialValue: selectedRole,
-                          decoration: const InputDecoration(
+                          dropdownColor: isDark ? AppColors.cardDark : Colors.white,
+                          style: TextStyle(
+                            color: isDark
+                                ? AppColors.textPrimaryDark
+                                : AppColors.textPrimaryLight,
+                            fontSize: 14,
+                          ),
+                          decoration: InputDecoration(
                             labelText: "Role in Clinic",
-                            prefixIcon: Icon(Icons.badge_outlined,
-                                color: AppColors.primary),
+                            prefixIcon: const Icon(
+                              Icons.badge_outlined,
+                              color: AppColors.primary,
+                            ),
+                            filled: true,
+                            fillColor: isDark
+                                ? AppColors.cardDark.withValues(alpha: 0.5)
+                                : Colors.white.withValues(alpha: 0.8),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: const BorderSide(
+                                color: AppColors.glassBorderLight,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: const BorderSide(
+                                color: AppColors.glassBorderLight,
+                              ),
+                            ),
                           ),
                           items: const [
                             DropdownMenuItem(
@@ -153,10 +184,33 @@ class _SignupScreenState extends State<SignupScreen> {
                         TextField(
                           controller: emailController,
                           keyboardType: TextInputType.emailAddress,
-                          decoration: const InputDecoration(
+                          style: TextStyle(
+                            color: isDark
+                                ? AppColors.textPrimaryDark
+                                : AppColors.textPrimaryLight,
+                          ),
+                          decoration: InputDecoration(
                             labelText: "Email Address",
-                            prefixIcon: Icon(Icons.email_outlined,
-                                color: AppColors.primary),
+                            prefixIcon: const Icon(
+                              Icons.email_outlined,
+                              color: AppColors.primary,
+                            ),
+                            filled: true,
+                            fillColor: isDark
+                                ? AppColors.cardDark.withValues(alpha: 0.5)
+                                : Colors.white.withValues(alpha: 0.8),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: const BorderSide(
+                                color: AppColors.glassBorderLight,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: const BorderSide(
+                                color: AppColors.glassBorderLight,
+                              ),
+                            ),
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -165,22 +219,45 @@ class _SignupScreenState extends State<SignupScreen> {
                         TextField(
                           controller: passwordController,
                           obscureText: hidePassword,
+                          style: TextStyle(
+                            color: isDark
+                                ? AppColors.textPrimaryDark
+                                : AppColors.textPrimaryLight,
+                          ),
                           decoration: InputDecoration(
                             labelText: "Password",
-                            prefixIcon: const Icon(Icons.lock_outline,
-                                color: AppColors.primary),
+                            prefixIcon: const Icon(
+                              Icons.lock_outline_rounded,
+                              color: AppColors.primary,
+                            ),
                             suffixIcon: IconButton(
                               icon: Icon(
                                 hidePassword
                                     ? Icons.visibility_off_outlined
                                     : Icons.visibility_outlined,
-                                color: Colors.grey,
+                                color: AppColors.textMutedLight,
                               ),
                               onPressed: () {
                                 setState(() {
                                   hidePassword = !hidePassword;
                                 });
                               },
+                            ),
+                            filled: true,
+                            fillColor: isDark
+                                ? AppColors.cardDark.withValues(alpha: 0.5)
+                                : Colors.white.withValues(alpha: 0.8),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: const BorderSide(
+                                color: AppColors.glassBorderLight,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: const BorderSide(
+                                color: AppColors.glassBorderLight,
+                              ),
                             ),
                           ),
                         ),
@@ -190,22 +267,45 @@ class _SignupScreenState extends State<SignupScreen> {
                         TextField(
                           controller: confirmPasswordController,
                           obscureText: hideConfirmPassword,
+                          style: TextStyle(
+                            color: isDark
+                                ? AppColors.textPrimaryDark
+                                : AppColors.textPrimaryLight,
+                          ),
                           decoration: InputDecoration(
                             labelText: "Confirm Password",
-                            prefixIcon: const Icon(Icons.lock_reset_outlined,
-                                color: AppColors.primary),
+                            prefixIcon: const Icon(
+                              Icons.lock_reset_rounded,
+                              color: AppColors.primary,
+                            ),
                             suffixIcon: IconButton(
                               icon: Icon(
                                 hideConfirmPassword
                                     ? Icons.visibility_off_outlined
                                     : Icons.visibility_outlined,
-                                color: Colors.grey,
+                                color: AppColors.textMutedLight,
                               ),
                               onPressed: () {
                                 setState(() {
                                   hideConfirmPassword = !hideConfirmPassword;
                                 });
                               },
+                            ),
+                            filled: true,
+                            fillColor: isDark
+                                ? AppColors.cardDark.withValues(alpha: 0.5)
+                                : Colors.white.withValues(alpha: 0.8),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: const BorderSide(
+                                color: AppColors.glassBorderLight,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: const BorderSide(
+                                color: AppColors.glassBorderLight,
+                              ),
                             ),
                           ),
                         ),
@@ -217,6 +317,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           isLoading: isLoading,
                           onPressed: signUp,
                           icon: Icons.person_add_alt_1_rounded,
+                          borderRadius: 16,
                         ),
                       ],
                     ),

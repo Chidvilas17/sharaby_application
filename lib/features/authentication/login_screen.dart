@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/utils/app_localizations.dart';
 import '../../shared/widgets/glass_card.dart';
 import '../../shared/widgets/gradient_button.dart';
 import 'forgot_password_dialog.dart';
@@ -64,6 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final loc = AppLocalizations.of(context);
 
     return Scaffold(
       body: Container(
@@ -71,47 +73,54 @@ class _LoginScreenState extends State<LoginScreen> {
         height: double.infinity,
         decoration: BoxDecoration(
           color: isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
-          image: DecorationImage(
-            image: const AssetImage('assets/medical_bg.png'),
-            fit: BoxFit.cover,
-            opacity: isDark ? 0.05 : 0.03,
-            onError: (err, stackTrace) {},
+          gradient: LinearGradient(
+            colors: isDark
+                ? [const Color(0xFF0F172A), const Color(0xFF1E293B)]
+                : [const Color(0xFFF0F9FF), const Color(0xFFE0F2FE)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
         child: SafeArea(
           child: Center(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Container(
                 constraints: const BoxConstraints(maxWidth: 440),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Brand Badge Header
+                    // Glowing Large Brand Logo Header
                     Container(
-                      padding: const EdgeInsets.all(18),
+                      padding: const EdgeInsets.all(22),
                       decoration: BoxDecoration(
-                        gradient: AppColors.primaryGradient,
+                        gradient: AppColors.heroGradient,
                         shape: BoxShape.circle,
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
-                            color: AppColors.primary.withValues(alpha: 0.3),
-                            blurRadius: 20,
-                            offset: const Offset(0, 8),
+                            color: AppColors.shadowBlue,
+                            blurRadius: 28,
+                            offset: Offset(0, 10),
+                          ),
+                          BoxShadow(
+                            color: AppColors.glowBlue,
+                            blurRadius: 16,
+                            spreadRadius: -2,
+                            offset: Offset(0, 4),
                           ),
                         ],
                       ),
                       child: const Icon(
                         Icons.local_hospital_rounded,
-                        size: 48,
+                        size: 54,
                         color: Colors.white,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 18),
                     Text(
                       AppConstants.appName,
                       style: TextStyle(
-                        fontSize: 30,
+                        fontSize: 32,
                         fontWeight: FontWeight.bold,
                         color: isDark
                             ? AppColors.textPrimaryDark
@@ -121,7 +130,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      "Clinic Management Portal",
+                      loc.translate('appSubtitle'),
                       style: TextStyle(
                         fontSize: 14,
                         color: isDark
@@ -131,15 +140,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const SizedBox(height: 32),
 
-                    // Glass Card Container
+                    // Glass Card Login Form
                     GlassCard(
-                      borderRadius: 24,
-                      padding: const EdgeInsets.all(24),
+                      borderRadius: 28,
+                      padding: const EdgeInsets.all(28),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Welcome Back!",
+                            loc.translate('loginTitle'),
                             style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
@@ -150,9 +159,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            "Sign in with your staff credentials",
+                            loc.translate('loginSubtitle'),
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 13.5,
                               color: isDark
                                   ? AppColors.textSecondaryDark
                                   : AppColors.textSecondaryLight,
@@ -160,38 +169,98 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           const SizedBox(height: 24),
 
-                          // Email input
+                          // Email Input
                           TextField(
                             controller: emailController,
                             keyboardType: TextInputType.emailAddress,
-                            decoration: const InputDecoration(
-                              labelText: "Email Address",
-                              prefixIcon: Icon(Icons.email_outlined,
-                                  color: AppColors.primary),
+                            style: TextStyle(
+                              color: isDark
+                                  ? AppColors.textPrimaryDark
+                                  : AppColors.textPrimaryLight,
+                            ),
+                            decoration: InputDecoration(
+                              labelText: loc.translate('emailLabel'),
+                              prefixIcon: const Icon(
+                                Icons.email_outlined,
+                                color: AppColors.primary,
+                              ),
+                              filled: true,
+                              fillColor: isDark
+                                  ? AppColors.cardDark.withValues(alpha: 0.5)
+                                  : Colors.white.withValues(alpha: 0.8),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                borderSide: const BorderSide(
+                                  color: AppColors.glassBorderLight,
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                borderSide: const BorderSide(
+                                  color: AppColors.glassBorderLight,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                borderSide: const BorderSide(
+                                  color: AppColors.primary,
+                                  width: 2,
+                                ),
+                              ),
                             ),
                           ),
                           const SizedBox(height: 16),
 
-                          // Password input
+                          // Password Input
                           TextField(
                             controller: passwordController,
                             obscureText: isPasswordHidden,
+                            style: TextStyle(
+                              color: isDark
+                                  ? AppColors.textPrimaryDark
+                                  : AppColors.textPrimaryLight,
+                            ),
                             decoration: InputDecoration(
-                              labelText: "Password",
-                              prefixIcon: const Icon(Icons.lock_outline,
-                                  color: AppColors.primary),
+                              labelText: loc.translate('passwordLabel'),
+                              prefixIcon: const Icon(
+                                Icons.lock_outline_rounded,
+                                color: AppColors.primary,
+                              ),
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   isPasswordHidden
                                       ? Icons.visibility_off_outlined
                                       : Icons.visibility_outlined,
-                                  color: Colors.grey,
+                                  color: AppColors.textMutedLight,
                                 ),
                                 onPressed: () {
                                   setState(() {
                                     isPasswordHidden = !isPasswordHidden;
                                   });
                                 },
+                              ),
+                              filled: true,
+                              fillColor: isDark
+                                  ? AppColors.cardDark.withValues(alpha: 0.5)
+                                  : Colors.white.withValues(alpha: 0.8),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                borderSide: const BorderSide(
+                                  color: AppColors.glassBorderLight,
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                borderSide: const BorderSide(
+                                  color: AppColors.glassBorderLight,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                borderSide: const BorderSide(
+                                  color: AppColors.primary,
+                                  width: 2,
+                                ),
                               ),
                             ),
                           ),
@@ -210,7 +279,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       value: rememberMe,
                                       activeColor: AppColors.primary,
                                       shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(4),
+                                        borderRadius: BorderRadius.circular(6),
                                       ),
                                       onChanged: (val) {
                                         setState(() {
@@ -238,9 +307,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                     builder: (_) => const ForgotPasswordDialog(),
                                   );
                                 },
-                                child: const Text(
-                                  "Forgot Password?",
-                                  style: TextStyle(
+                                child: Text(
+                                  loc.translate('forgotPassword'),
+                                  style: const TextStyle(
                                     color: AppColors.primary,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 13,
@@ -251,24 +320,25 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           const SizedBox(height: 20),
 
-                          // Gradient Submit Button
+                          // Gradient Login Button
                           GradientButton(
-                            text: "SIGN IN",
+                            text: loc.translate('signIn').toUpperCase(),
                             isLoading: isLoading,
                             onPressed: login,
                             icon: Icons.login_rounded,
+                            borderRadius: 16,
                           ),
                         ],
                       ),
                     ),
                     const SizedBox(height: 24),
 
-                    // Signup redirect
+                    // Signup Navigation Link
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Don't have an account?",
+                          loc.translate('noAccount'),
                           style: TextStyle(
                             color: isDark
                                 ? AppColors.textSecondaryDark
@@ -279,14 +349,24 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
-                                builder: (context) => const SignupScreen(),
+                              PageRouteBuilder(
+                                pageBuilder: (context, anim1, anim2) =>
+                                    const SignupScreen(),
+                                transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: const Offset(1, 0),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  );
+                                },
                               ),
                             );
                           },
-                          child: const Text(
-                            "Register Staff Account",
-                            style: TextStyle(
+                          child: Text(
+                            loc.translate('signUp'),
+                            style: const TextStyle(
                               color: AppColors.primary,
                               fontWeight: FontWeight.bold,
                             ),

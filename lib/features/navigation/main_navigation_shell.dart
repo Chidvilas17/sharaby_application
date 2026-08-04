@@ -6,13 +6,14 @@ import '../appointments/appointments_screen.dart';
 import '../billing/billing_screen.dart';
 import '../dashboard/dashboard_screen.dart';
 import '../documents/documents_screen.dart';
+import '../notifications/notifications_screen.dart';
 import '../patients/patient_list_screen.dart';
 import '../prescriptions/prescriptions_screen.dart';
 import '../profile/profile_screen.dart';
 import '../reports/reports_screen.dart';
 import '../settings/settings_screen.dart';
 
-/// Navigation Shell holding the active page state and coordinating Drawer & BottomNavBar
+/// Navigation Shell holding active page state and coordinating Drawer & BottomNavBar
 class MainNavigationShell extends StatefulWidget {
   const MainNavigationShell({super.key});
 
@@ -31,20 +32,23 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
     BillingScreen(),
     ReportsScreen(),
     DocumentsScreen(),
+    NotificationsScreen(),
     ProfileScreen(),
     SettingsScreen(),
     AboutScreen(),
   ];
 
   void _onTabSelected(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
+    if (index >= 0 && index < _pages.length) {
+      setState(() {
+        _currentIndex = index;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // Show Bottom Navigation Bar only for the primary 5 tabs (Dashboard, Patients, Appointments, Prescriptions, Billing)
+    // Show Bottom Navigation Bar for primary 5 tabs (Dashboard, Patients, Appointments, Prescriptions, Billing)
     final bool showBottomNav = _currentIndex < 5;
 
     return Scaffold(
