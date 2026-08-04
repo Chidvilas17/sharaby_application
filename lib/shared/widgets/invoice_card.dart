@@ -4,8 +4,9 @@ import '../../core/theme/app_colors.dart';
 import '../../core/utils/formatters.dart';
 import '../models/invoice_model.dart';
 import 'medical_card.dart';
+import 'protected_financial_text.dart';
 
-/// Invoice summary card for billing module
+/// Invoice summary card for billing module with financial security protection
 class InvoiceCard extends StatelessWidget {
   final InvoiceModel invoice;
   final VoidCallback? onTap;
@@ -78,39 +79,44 @@ class InvoiceCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    invoice.patientName,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: isDark
-                          ? AppColors.textPrimaryDark
-                          : AppColors.textPrimaryLight,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      invoice.patientName,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: isDark
+                            ? AppColors.textPrimaryDark
+                            : AppColors.textPrimaryLight,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    'Due: ${AppFormatters.formatDate(invoice.dueDate)}',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: isDark
-                          ? AppColors.textMutedDark
-                          : AppColors.textMutedLight,
+                    const SizedBox(height: 2),
+                    Text(
+                      'Due: ${AppFormatters.formatDate(invoice.dueDate)}',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: isDark
+                            ? AppColors.textMutedDark
+                            : AppColors.textMutedLight,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-              Text(
-                AppFormatters.formatCurrency(invoice.totalAmount),
+              const SizedBox(width: 8),
+              ProtectedFinancialText(
+                actualValue: AppFormatters.formatCurrency(invoice.totalAmount),
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: isDark
                       ? AppColors.textPrimaryDark
-                      : AppColors.textPrimaryLight,
+                      : AppColors.primaryDark,
                 ),
               ),
             ],

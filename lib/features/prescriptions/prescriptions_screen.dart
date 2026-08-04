@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/utils/app_localizations.dart';
 import '../../shared/models/prescription_model.dart';
 import '../../shared/repositories/prescription_repository.dart';
+import '../../shared/widgets/animated_glass_background.dart';
+import '../../shared/widgets/custom_app_bar.dart';
 import '../../shared/widgets/custom_search_bar.dart';
 import '../../shared/widgets/empty_state_widget.dart';
 import '../../shared/widgets/loading_widget.dart';
@@ -54,69 +57,68 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Prescription Records'),
-        centerTitle: false,
-        leading: IconButton(
-          icon: const Icon(Icons.menu_rounded, color: AppColors.primary),
-          onPressed: () => Scaffold.of(context).openDrawer(),
-        ),
+      appBar: CustomAppBar(
+        title: loc.translate('prescriptionsTitle'),
       ),
-      body: _isLoading
-          ? const LoadingWidget(message: 'Loading Rx records...')
-          : SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 12),
-                    CustomSearchBar(
-                      controller: _searchController,
-                      hintText: 'Search by patient name, diagnosis or Rx ID...',
-                      onChanged: _onSearch,
-                    ),
-                    const SizedBox(height: 16),
-                    Expanded(
-                      child: _filteredPrescriptions.isEmpty
-                          ? EmptyStateWidget(
-                              title: 'No Prescriptions Found',
-                              message: 'No prescription records matching your search.',
-                              icon: Icons.description_outlined,
-                              buttonText: 'Create Prescription',
-                              onButtonPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => const CreatePrescriptionScreen(),
-                                  ),
-                                ).then((_) => _fetchPrescriptions());
-                              },
-                            )
-                          : ListView.builder(
-                              padding: const EdgeInsets.only(bottom: 90),
-                              itemCount: _filteredPrescriptions.length,
-                              itemBuilder: (context, index) {
-                                final rx = _filteredPrescriptions[index];
-                                return Padding(
-                                  padding: const EdgeInsets.only(bottom: 12),
-                                  child: PrescriptionCard(
-                                    prescription: rx,
-                                    onTap: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (_) => PrescriptionDetailDialog(prescription: rx),
-                                      );
-                                    },
-                                  ),
-                                );
-                              },
-                            ),
-                    ),
-                  ],
+      body: AnimatedGlassBackground(
+        child: _isLoading
+            ? LoadingWidget(message: loc.translate('prescriptionsTitle'))
+            : SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 12),
+                      CustomSearchBar(
+                        controller: _searchController,
+                        hintText: loc.translate('searchPlaceholder'),
+                        onChanged: _onSearch,
+                      ),
+                      const SizedBox(height: 16),
+                      Expanded(
+                        child: _filteredPrescriptions.isEmpty
+                            ? EmptyStateWidget(
+                                title: loc.translate('noFilesMatch'),
+                                message: loc.translate('noFilesMatch'),
+                                icon: Icons.description_outlined,
+                                buttonText: loc.translate('newPrescription'),
+                                onButtonPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => const CreatePrescriptionScreen(),
+                                    ),
+                                  ).then((_) => _fetchPrescriptions());
+                                },
+                              )
+                            : ListView.builder(
+                                padding: const EdgeInsets.only(bottom: 90),
+                                itemCount: _filteredPrescriptions.length,
+                                itemBuilder: (context, index) {
+                                  final rx = _filteredPrescriptions[index];
+                                  return Padding(
+                                    padding: const EdgeInsets.only(bottom: 12),
+                                    child: PrescriptionCard(
+                                      prescription: rx,
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (_) => PrescriptionDetailDialog(prescription: rx),
+                                        );
+                                      },
+                                    ),
+                                  );
+                                },
+                              ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
+      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(
@@ -126,8 +128,13 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
             ),
           ).then((_) => _fetchPrescriptions());
         },
-        icon: const Icon(Icons.post_add_rounded),
-        label: const Text('New Rx'),
+        backgroundColor: AppColors.primaryDark,
+        elevation: 6,
+        icon: const Icon(Icons.post_add_rounded, color: Colors.white),
+        label: Text(
+          loc.translate('newPrescription'),
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }

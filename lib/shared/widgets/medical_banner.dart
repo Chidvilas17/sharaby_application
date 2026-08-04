@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 
-/// Reusable Medical Banner Widget for Sharaby Center Dashboard
+/// Reusable Medical Banner Widget for Sharaby Center Dashboard featuring official logo
 class MedicalBanner extends StatelessWidget {
   final String title;
   final String subtitle;
@@ -127,10 +127,11 @@ class MedicalBanner extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 14),
-                        Row(
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 6,
                           children: [
                             _buildBadge(Icons.cloud_done_rounded, 'Cloud Synced'),
-                            const SizedBox(width: 8),
                             _buildBadge(Icons.security_rounded, 'Encrypted'),
                           ],
                         ),
@@ -138,30 +139,32 @@ class MedicalBanner extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  // Glossy Hospital Shield Icon Graphic
+                  // Glossy Sharaby Logo Graphic
                   Container(
                     width: 76,
                     height: 76,
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.25),
+                      color: Colors.white,
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.5),
+                        color: Colors.white.withValues(alpha: 0.8),
                         width: 2,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.1),
-                          blurRadius: 12,
+                          color: Colors.black.withValues(alpha: 0.15),
+                          blurRadius: 14,
                           offset: const Offset(0, 4),
                         ),
                       ],
                     ),
-                    child: const Center(
-                      child: Icon(
-                        Icons.local_hospital_rounded,
-                        size: 42,
-                        color: Colors.white,
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Image.asset(
+                          'assets/images/logo.png',
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
                   ),

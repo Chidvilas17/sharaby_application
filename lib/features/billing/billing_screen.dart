@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_enums.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/utils/app_localizations.dart';
 import '../../core/utils/formatters.dart';
 import '../../shared/models/invoice_model.dart';
 import '../../shared/repositories/billing_repository.dart';
+import '../../shared/widgets/animated_glass_background.dart';
+import '../../shared/widgets/custom_app_bar.dart';
 import '../../shared/widgets/custom_search_bar.dart';
 import '../../shared/widgets/empty_state_widget.dart';
 import '../../shared/widgets/invoice_card.dart';
@@ -64,98 +67,99 @@ class _BillingScreenState extends State<BillingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Billing & Invoices'),
-        centerTitle: false,
-        leading: IconButton(
-          icon: const Icon(Icons.menu_rounded, color: AppColors.primary),
-          onPressed: () => Scaffold.of(context).openDrawer(),
-        ),
+      appBar: CustomAppBar(
+        title: loc.translate('billingTitle'),
       ),
-      body: _isLoading
-          ? const LoadingWidget(message: 'Loading billing records...')
-          : SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 12),
+      body: AnimatedGlassBackground(
+        child: _isLoading
+            ? LoadingWidget(message: loc.translate('billingTitle'))
+            : SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 12),
 
-                    // Financial summary cards
-                    Row(
-                      children: [
-                        Expanded(
-                          child: StatCard(
-                            title: 'Collected Revenue',
-                            value: AppFormatters.formatCurrency(_totalCollected),
-                            icon: Icons.account_balance_wallet_rounded,
-                            color: AppColors.success,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: StatCard(
-                            title: 'Pending Balances',
-                            value: AppFormatters.formatCurrency(_totalPending),
-                            icon: Icons.pending_actions_rounded,
-                            color: AppColors.warning,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-
-                    CustomSearchBar(
-                      controller: _searchController,
-                      hintText: 'Search invoice # or patient name...',
-                      onChanged: _onSearch,
-                    ),
-                    const SizedBox(height: 16),
-
-                    Expanded(
-                      child: _filteredInvoices.isEmpty
-                          ? EmptyStateWidget(
-                              title: 'No Invoices Found',
-                              message: 'No billing records match your search.',
-                              icon: Icons.receipt_long_rounded,
-                              buttonText: 'Create Invoice',
-                              onButtonPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (_) => CreateInvoiceDialog(
-                                    onCreated: _fetchInvoices,
-                                  ),
-                                );
-                              },
-                            )
-                          : ListView.builder(
-                              padding: const EdgeInsets.only(bottom: 90),
-                              itemCount: _filteredInvoices.length,
-                              itemBuilder: (context, index) {
-                                final invoice = _filteredInvoices[index];
-                                return Padding(
-                                  padding: const EdgeInsets.only(bottom: 12),
-                                  child: InvoiceCard(
-                                    invoice: invoice,
-                                    onTap: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (_) => InvoiceDetailDialog(
-                                          invoice: invoice,
-                                          onStatusUpdated: _fetchInvoices,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                );
-                              },
+                      // Financial summary cards
+                      Row(
+                        children: [
+                          Expanded(
+                            child: StatCard(
+                              title: loc.translate('collectedRevenue'),
+                              value: AppFormatters.formatCurrency(_totalCollected),
+                              isFinancial: true,
+                              icon: Icons.account_balance_wallet_rounded,
+                              color: AppColors.success,
                             ),
-                    ),
-                  ],
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: StatCard(
+                              title: loc.translate('pendingBalances'),
+                              value: AppFormatters.formatCurrency(_totalPending),
+                              isFinancial: true,
+                              icon: Icons.pending_actions_rounded,
+                              color: AppColors.warning,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+
+                      CustomSearchBar(
+                        controller: _searchController,
+                        hintText: loc.translate('searchPlaceholder'),
+                        onChanged: _onSearch,
+                      ),
+                      const SizedBox(height: 16),
+
+                      Expanded(
+                        child: _filteredInvoices.isEmpty
+                            ? EmptyStateWidget(
+                                title: loc.translate('noInvoicesFound'),
+                                message: loc.translate('noFilesMatch'),
+                                icon: Icons.receipt_long_rounded,
+                                buttonText: loc.translate('createInvoice'),
+                                onButtonPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) => CreateInvoiceDialog(
+                                      onCreated: _fetchInvoices,
+                                    ),
+                                  );
+                                },
+                              )
+                            : ListView.builder(
+                                padding: const EdgeInsets.only(bottom: 90),
+                                itemCount: _filteredInvoices.length,
+                                itemBuilder: (context, index) {
+                                  final invoice = _filteredInvoices[index];
+                                  return Padding(
+                                    padding: const EdgeInsets.only(bottom: 12),
+                                    child: InvoiceCard(
+                                      invoice: invoice,
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (_) => InvoiceDetailDialog(
+                                            invoice: invoice,
+                                            onStatusUpdated: _fetchInvoices,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  );
+                                },
+                              ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
+      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           showDialog(
@@ -165,8 +169,13 @@ class _BillingScreenState extends State<BillingScreen> {
             ),
           );
         },
-        icon: const Icon(Icons.add_card_rounded),
-        label: const Text('Create Invoice'),
+        backgroundColor: AppColors.primaryDark,
+        elevation: 6,
+        icon: const Icon(Icons.add_card_rounded, color: Colors.white),
+        label: Text(
+          loc.translate('createInvoice'),
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }

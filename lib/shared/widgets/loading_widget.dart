@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import 'glass_card.dart';
 
-/// Glassmorphism Loading Widget
+/// Glassmorphism Loading Widget featuring official Sharaby logo
 class LoadingWidget extends StatelessWidget {
   final String message;
 
@@ -27,17 +27,18 @@ class LoadingWidget extends StatelessWidget {
               alignment: Alignment.center,
               children: [
                 const SizedBox(
-                  width: 54,
-                  height: 54,
+                  width: 56,
+                  height: 56,
                   child: CircularProgressIndicator(
                     color: AppColors.primary,
                     strokeWidth: 3,
                   ),
                 ),
-                const Icon(
-                  Icons.local_hospital_rounded,
-                  color: AppColors.primary,
-                  size: 24,
+                Image.asset(
+                  'assets/images/logo.png',
+                  width: 28,
+                  height: 28,
+                  fit: BoxFit.contain,
                 ),
               ],
             ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/utils/app_localizations.dart';
+import '../../shared/widgets/animated_glass_background.dart';
 import '../../shared/widgets/glass_card.dart';
 import '../../shared/widgets/gradient_button.dart';
 import 'forgot_password_dialog.dart';
@@ -26,10 +27,11 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> login() async {
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
+    final loc = AppLocalizations.of(context);
 
     if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please fill in email and password")),
+        SnackBar(content: Text(loc.translate('fillRequiredFields'))),
       );
       return;
     }
@@ -46,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: AppColors.error,
-          content: Text(e.message ?? 'Login failed'),
+          content: Text(e.message ?? loc.translate('loginFailed')),
         ),
       );
     } catch (e) {
@@ -68,19 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final loc = AppLocalizations.of(context);
 
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-          color: isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
-          gradient: LinearGradient(
-            colors: isDark
-                ? [const Color(0xFF0F172A), const Color(0xFF1E293B)]
-                : [const Color(0xFFF0F9FF), const Color(0xFFE0F2FE)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
+      body: AnimatedGlassBackground(
         child: SafeArea(
           child: Center(
             child: SingleChildScrollView(
@@ -90,12 +80,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Glowing Large Brand Logo Header
+                    // Official Sharaby Logo Header
                     Container(
-                      padding: const EdgeInsets.all(22),
+                      padding: const EdgeInsets.all(18),
                       decoration: BoxDecoration(
-                        gradient: AppColors.heroGradient,
+                        color: Colors.white,
                         shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.white.withValues(alpha: 0.8),
+                          width: 2,
+                        ),
                         boxShadow: const [
                           BoxShadow(
                             color: AppColors.shadowBlue,
@@ -110,35 +104,37 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ],
                       ),
-                      child: const Icon(
-                        Icons.local_hospital_rounded,
-                        size: 54,
-                        color: Colors.white,
+                      child: Image.asset(
+                        'assets/images/logo.png',
+                        width: 64,
+                        height: 64,
+                        fit: BoxFit.contain,
                       ),
                     ),
                     const SizedBox(height: 18),
                     Text(
                       AppConstants.appName,
                       style: TextStyle(
-                        fontSize: 32,
+                        fontSize: 30,
                         fontWeight: FontWeight.bold,
                         color: isDark
                             ? AppColors.textPrimaryDark
-                            : AppColors.textPrimaryLight,
+                            : AppColors.primaryDark,
                         letterSpacing: -0.5,
                       ),
                     ),
                     const SizedBox(height: 6),
                     Text(
                       loc.translate('appSubtitle'),
+                      textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 13.5,
                         color: isDark
                             ? AppColors.textSecondaryDark
                             : AppColors.textSecondaryLight,
                       ),
                     ),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 28),
 
                     // Glass Card Login Form
                     GlassCard(
@@ -154,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               fontWeight: FontWeight.bold,
                               color: isDark
                                   ? AppColors.textPrimaryDark
-                                  : AppColors.textPrimaryLight,
+                                  : AppColors.primaryDark,
                             ),
                           ),
                           const SizedBox(height: 4),
@@ -290,7 +286,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                   const SizedBox(width: 8),
                                   Text(
-                                    "Remember Me",
+                                    loc.translate('rememberMe'),
                                     style: TextStyle(
                                       fontSize: 13,
                                       color: isDark
@@ -310,7 +306,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: Text(
                                   loc.translate('forgotPassword'),
                                   style: const TextStyle(
-                                    color: AppColors.primary,
+                                    color: AppColors.primaryDark,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 13,
                                   ),
@@ -326,7 +322,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             isLoading: isLoading,
                             onPressed: login,
                             icon: Icons.login_rounded,
-                            borderRadius: 16,
+                            borderRadius: 28,
                           ),
                         ],
                       ),
@@ -367,7 +363,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Text(
                             loc.translate('signUp'),
                             style: const TextStyle(
-                              color: AppColors.primary,
+                              color: AppColors.primaryDark,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

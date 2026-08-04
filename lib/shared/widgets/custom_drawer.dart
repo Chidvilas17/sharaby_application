@@ -2,12 +2,13 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/services/auth_service.dart';
+import '../../core/services/financial_security_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/utils/app_localizations.dart';
 import 'confirmation_dialog.dart';
 import 'drawer_tile.dart';
 
-/// Floating Glassmorphic Navigation Drawer inspired by modern macOS/Dribbble UI
+/// Floating Glassmorphic Navigation Drawer inspired by Apple VisionOS & modern SaaS UI
 class CustomDrawer extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onItemSelected;
@@ -23,7 +24,6 @@ class CustomDrawer extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final loc = AppLocalizations.of(context);
 
-    // Exact required menu items: Profile, Dashboard, Patients, Prescriptions, Billing, Reports, Documents, Notifications, Settings, About, Logout
     final List<Map<String, dynamic>> menuItems = [
       {
         'index': 0,
@@ -114,11 +114,11 @@ class CustomDrawer extends StatelessWidget {
               filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
               child: Column(
                 children: [
-                  // Floating Profile Card Header inspired by reference image
+                  // Floating Profile Header with Official Logo & Doctor info
                   GestureDetector(
                     onTap: () {
                       Navigator.pop(context);
-                      onItemSelected(8); // Profile tab index
+                      onItemSelected(8); // Profile tab
                     },
                     child: Container(
                       margin: const EdgeInsets.all(12),
@@ -141,18 +141,20 @@ class CustomDrawer extends StatelessWidget {
                       child: Row(
                         children: [
                           Container(
-                            padding: const EdgeInsets.all(2),
+                            padding: const EdgeInsets.all(3),
                             decoration: const BoxDecoration(
                               color: Colors.white,
                               shape: BoxShape.circle,
                             ),
-                            child: const CircleAvatar(
-                              radius: 24,
-                              backgroundColor: AppColors.primaryLight,
-                              child: Icon(
-                                Icons.person_rounded,
-                                size: 28,
-                                color: AppColors.primaryDark,
+                            child: CircleAvatar(
+                              radius: 22,
+                              backgroundColor: Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: Image.asset(
+                                  'assets/images/logo.png',
+                                  fit: BoxFit.contain,
+                                ),
                               ),
                             ),
                           ),
@@ -220,7 +222,7 @@ class CustomDrawer extends StatelessWidget {
                   ),
 
                   const Divider(height: 1, indent: 20, endIndent: 20),
-                  // Logout Tile Button
+                  // Logout Button
                   Padding(
                     padding: const EdgeInsets.all(12),
                     child: Container(
@@ -246,11 +248,11 @@ class CustomDrawer extends StatelessWidget {
                           showDialog(
                             context: context,
                             builder: (context) => ConfirmationDialog(
-                              title: 'Sign Out',
-                              content:
-                                  'Are you sure you want to sign out of Sharaby Center?',
-                              confirmText: 'Logout',
+                              title: loc.translate('confirmSignOutTitle'),
+                              content: loc.translate('confirmSignOutDesc'),
+                              confirmText: loc.translate('navLogout'),
                               onConfirm: () async {
+                                FinancialSecurityService().resetOnLogout();
                                 await AuthService().signOut();
                               },
                             ),

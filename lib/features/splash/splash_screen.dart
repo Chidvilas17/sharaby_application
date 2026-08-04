@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/constants/app_constants.dart';
-import '../../core/theme/app_colors.dart';
+import '../../shared/widgets/animated_glass_background.dart';
 import '../onboarding/onboarding_screen.dart';
 import 'auth_gate.dart';
 
-/// Animated Splash Screen with scale & fade animation
+/// Animated Premium Splash Screen with scale & fade animation featuring official Sharaby logo
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -31,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen>
       CurvedAnimation(parent: _controller, curve: Curves.easeIn),
     );
 
-    _scaleAnimation = Tween<double>(begin: 0.7, end: 1.0).animate(
+    _scaleAnimation = Tween<double>(begin: 0.75, end: 1.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.elasticOut),
     );
 
@@ -72,10 +72,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppColors.heroGradient,
-        ),
+      body: AnimatedGlassBackground(
         child: Center(
           child: AnimatedBuilder(
             animation: _controller,
@@ -88,22 +85,27 @@ class _SplashScreenState extends State<SplashScreen>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        padding: const EdgeInsets.all(24),
+                        padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.8),
+                            width: 3,
+                          ),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.2),
-                              blurRadius: 30,
-                              offset: const Offset(0, 10),
+                              color: const Color(0xFF0284C7).withValues(alpha: 0.3),
+                              blurRadius: 36,
+                              offset: const Offset(0, 12),
                             ),
                           ],
                         ),
-                        child: const Icon(
-                          Icons.local_hospital_rounded,
-                          size: 72,
-                          color: AppColors.primary,
+                        child: Image.asset(
+                          'assets/images/logo.png',
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.contain,
                         ),
                       ),
                       const SizedBox(height: 28),
@@ -112,7 +114,7 @@ class _SplashScreenState extends State<SplashScreen>
                         style: TextStyle(
                           fontSize: 34,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: Color(0xFF0284C7),
                           letterSpacing: -0.5,
                         ),
                       ),
@@ -121,17 +123,17 @@ class _SplashScreenState extends State<SplashScreen>
                         AppConstants.appTagline,
                         style: TextStyle(
                           fontSize: 14,
-                          color: Colors.white70,
-                          fontWeight: FontWeight.w400,
+                          color: Color(0xFF475569),
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                       const SizedBox(height: 48),
                       const SizedBox(
-                        width: 28,
-                        height: 28,
+                        width: 30,
+                        height: 30,
                         child: CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 2.5,
+                          color: Color(0xFF0284C7),
+                          strokeWidth: 3,
                         ),
                       ),
                     ],

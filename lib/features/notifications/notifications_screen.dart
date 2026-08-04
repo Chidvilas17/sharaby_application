@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/utils/app_localizations.dart';
+import '../../shared/widgets/animated_glass_background.dart';
 import '../../shared/widgets/custom_app_bar.dart';
 import '../../shared/widgets/notification_card.dart';
 
-/// Notifications Screen with sample notifications, filter tabs, and mark as read options
+/// Notifications Screen with timeline cards and filter options
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
 
@@ -22,7 +23,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       'message': 'Mohamed Ali was registered as a new patient by Reception.',
       'time': '5 mins ago',
       'icon': Icons.person_add_alt_1_rounded,
-      'color': AppColors.primary,
+      'color': AppColors.primaryDark,
       'isRead': false,
     },
     {
@@ -64,13 +65,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   ];
 
   void _markAllAsRead() {
+    final loc = AppLocalizations.of(context);
     setState(() {
       for (var n in _notifications) {
         n['isRead'] = true;
       }
     });
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('All notifications marked as read')),
+      SnackBar(content: Text(loc.translate('markAllRead'))),
     );
   }
 
@@ -85,65 +87,68 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     }).toList();
 
     return Scaffold(
-      backgroundColor: isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
       appBar: CustomAppBar(
         title: loc.translate('notificationsTitle'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.done_all_rounded, color: AppColors.primary),
+            icon: const Icon(Icons.done_all_rounded, color: AppColors.primaryDark),
             tooltip: loc.translate('markAllRead'),
             onPressed: _markAllAsRead,
           ),
         ],
       ),
-      body: Column(
-        children: [
-          // Filter Bar (All / Unread)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            child: Row(
-              children: [
-                _buildFilterChip(0, loc.translate('all')),
-                const SizedBox(width: 10),
-                _buildFilterChip(1, loc.translate('unread')),
-              ],
-            ),
-          ),
-          // Notifications List
-          Expanded(
-            child: filteredList.isEmpty
-                ? Center(
-                    child: Text(
-                      'No notifications found',
-                      style: TextStyle(
-                        color: isDark
-                            ? AppColors.textMutedDark
-                            : AppColors.textMutedLight,
-                      ),
-                    ),
-                  )
-                : ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    itemCount: filteredList.length,
-                    itemBuilder: (context, index) {
-                      final item = filteredList[index];
-                      return NotificationCard(
-                        title: item['title'] as String,
-                        message: item['message'] as String,
-                        time: item['time'] as String,
-                        icon: item['icon'] as IconData,
-                        iconColor: item['color'] as Color,
-                        isRead: item['isRead'] as bool,
-                        onTap: () {
-                          setState(() {
-                            item['isRead'] = true;
-                          });
+      body: AnimatedGlassBackground(
+        child: SafeArea(
+          child: Column(
+            children: [
+              // Filter Bar (All / Unread)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                child: Row(
+                  children: [
+                    _buildFilterChip(0, loc.translate('all')),
+                    const SizedBox(width: 10),
+                    _buildFilterChip(1, loc.translate('unread')),
+                  ],
+                ),
+              ),
+              // Notifications List
+              Expanded(
+                child: filteredList.isEmpty
+                    ? Center(
+                        child: Text(
+                          loc.translate('noFilesMatch'),
+                          style: TextStyle(
+                            color: isDark
+                                ? AppColors.textMutedDark
+                                : AppColors.textMutedLight,
+                          ),
+                        ),
+                      )
+                    : ListView.builder(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        itemCount: filteredList.length,
+                        itemBuilder: (context, index) {
+                          final item = filteredList[index];
+                          return NotificationCard(
+                            title: item['title'] as String,
+                            message: item['message'] as String,
+                            time: item['time'] as String,
+                            icon: item['icon'] as IconData,
+                            iconColor: item['color'] as Color,
+                            isRead: item['isRead'] as bool,
+                            onTap: () {
+                              setState(() {
+                                item['isRead'] = true;
+                              });
+                            },
+                          );
                         },
-                      );
-                    },
-                  ),
+                      ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -158,13 +163,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           _selectedFilter = index;
         });
       },
-      selectedColor: AppColors.primary,
-      backgroundColor: Colors.transparent,
-      side: BorderSide(
-        color: isSelected ? AppColors.primary : AppColors.glassBorderLight,
-      ),
+      selectedColor: AppColors.primaryDark,
       labelStyle: TextStyle(
-        color: isSelected ? Colors.white : AppColors.primary,
+        color: isSelected ? Colors.white : AppColors.primaryDark,
         fontWeight: FontWeight.bold,
       ),
     );

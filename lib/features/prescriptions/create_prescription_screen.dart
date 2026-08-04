@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/utils/app_localizations.dart';
 import '../../shared/models/patient_model.dart';
 import '../../shared/models/prescription_model.dart';
 import '../../shared/repositories/patient_repository.dart';
 import '../../shared/repositories/prescription_repository.dart';
+import '../../shared/widgets/animated_glass_background.dart';
 import '../../shared/widgets/custom_app_bar.dart';
 import '../../shared/widgets/gradient_button.dart';
 import '../../shared/widgets/medical_card.dart';
@@ -103,9 +105,11 @@ class _CreatePrescriptionScreenState extends State<CreatePrescriptionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return Scaffold(
-      appBar: const CustomAppBar(title: 'New Prescription'),
-      body: SafeArea(
+      appBar: CustomAppBar(title: loc.translate('newPrescription')),
+      body: AnimatedGlassBackground(
+        child: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
           child: Form(
@@ -230,6 +234,7 @@ class _CreatePrescriptionScreenState extends State<CreatePrescriptionScreen> {
             ),
           ),
         ),
+      ),
       ),
     );
   }

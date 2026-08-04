@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/utils/app_localizations.dart';
+import '../../shared/widgets/animated_glass_background.dart';
 import '../../shared/widgets/custom_app_bar.dart';
 import '../../shared/widgets/glass_card.dart';
 import '../../shared/widgets/gradient_button.dart';
@@ -33,6 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       backgroundColor: Colors.transparent,
       builder: (context) {
         final loc = AppLocalizations.of(context);
+        final isDark = Theme.of(context).brightness == Brightness.dark;
 
         return Padding(
           padding: EdgeInsets.only(
@@ -51,9 +53,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       Text(
                         loc.translate('editProfile'),
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
+                          color: isDark ? AppColors.textPrimaryDark : AppColors.primaryDark,
                         ),
                       ),
                       IconButton(
@@ -64,17 +67,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const SizedBox(height: 16),
 
-                  // Avatar Picture Placeholder Picker
+                  // Avatar Picture Picker with Official Logo
                   Center(
                     child: Stack(
                       children: [
-                        CircleAvatar(
-                          radius: 40,
-                          backgroundColor: AppColors.primary.withValues(alpha: 0.15),
-                          child: const Icon(
-                            Icons.person_rounded,
-                            size: 48,
-                            color: AppColors.primary,
+                        Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.shadowBlue,
+                                blurRadius: 16,
+                              ),
+                            ],
+                          ),
+                          child: CircleAvatar(
+                            radius: 38,
+                            backgroundColor: Colors.white,
+                            child: Padding(
+                              padding: const EdgeInsets.all(6.0),
+                              child: Image.asset(
+                                'assets/images/logo.png',
+                                fit: BoxFit.contain,
+                              ),
+                            ),
                           ),
                         ),
                         Positioned(
@@ -83,7 +101,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: Container(
                             padding: const EdgeInsets.all(6),
                             decoration: const BoxDecoration(
-                              color: AppColors.primary,
+                              color: AppColors.primaryDark,
                               shape: BoxShape.circle,
                             ),
                             child: const Icon(
@@ -103,8 +121,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     controller: nameCtrl,
                     decoration: InputDecoration(
                       labelText: loc.translate('fullName'),
-                      prefixIcon: const Icon(Icons.person_outline,
-                          color: AppColors.primary),
+                      prefixIcon: const Icon(Icons.person_outline, color: AppColors.primary),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),
@@ -118,8 +135,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     keyboardType: TextInputType.phone,
                     decoration: InputDecoration(
                       labelText: loc.translate('phone'),
-                      prefixIcon: const Icon(Icons.phone_outlined,
-                          color: AppColors.primary),
+                      prefixIcon: const Icon(Icons.phone_outlined, color: AppColors.primary),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),
@@ -133,8 +149,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       labelText: loc.translate('email'),
-                      prefixIcon: const Icon(Icons.email_outlined,
-                          color: AppColors.primary),
+                      prefixIcon: const Icon(Icons.email_outlined, color: AppColors.primary),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),
@@ -147,8 +162,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     controller: addressCtrl,
                     decoration: InputDecoration(
                       labelText: loc.translate('address'),
-                      prefixIcon: const Icon(Icons.location_on_outlined,
-                          color: AppColors.primary),
+                      prefixIcon: const Icon(Icons.location_on_outlined, color: AppColors.primary),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),
@@ -191,153 +205,151 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final loc = AppLocalizations.of(context);
 
     return Scaffold(
-      backgroundColor: isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
       appBar: CustomAppBar(
         title: loc.translate('navProfile'),
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          child: Column(
-            children: [
-              // Header Card with Avatar & Glowing Badge
-              GlassCard(
-                borderRadius: 28,
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  children: [
-                    Stack(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: AppColors.heroGradient,
-                          ),
-                          child: CircleAvatar(
-                            radius: 46,
-                            backgroundColor:
-                                isDark ? AppColors.cardDark : Colors.white,
-                            child: const CircleAvatar(
-                              radius: 42,
-                              backgroundColor: AppColors.primaryLight,
-                              child: Icon(
-                                Icons.person_rounded,
-                                size: 54,
-                                color: AppColors.primaryDark,
+      body: AnimatedGlassBackground(
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: Column(
+              children: [
+                // Header Card with Avatar & Glowing Badge
+                GlassCard(
+                  borderRadius: 28,
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    children: [
+                      Stack(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: AppColors.heroGradient,
+                            ),
+                            child: CircleAvatar(
+                              radius: 46,
+                              backgroundColor: Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Image.asset(
+                                  'assets/images/logo.png',
+                                  fit: BoxFit.contain,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        Positioned(
-                          bottom: 2,
-                          right: 2,
-                          child: Container(
-                            padding: const EdgeInsets.all(6),
-                            decoration: const BoxDecoration(
-                              color: AppColors.accent,
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              Icons.verified_rounded,
-                              size: 16,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 14),
-                    Text(
-                      _doctorName,
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: isDark
-                            ? AppColors.textPrimaryDark
-                            : AppColors.textPrimaryLight,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      _doctorTitle,
-                      style: TextStyle(
-                        color: isDark
-                            ? AppColors.textMutedDark
-                            : AppColors.textMutedLight,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 5,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(
-                            Icons.medical_services_rounded,
-                            color: AppColors.primary,
-                            size: 14,
-                          ),
-                          const SizedBox(width: 6),
-                          Text(
-                            loc.translate('doctorRole'),
-                            style: const TextStyle(
-                              color: AppColors.primary,
-                              fontSize: 11,
-                              fontWeight: FontWeight.bold,
+                          Positioned(
+                            bottom: 2,
+                            right: 2,
+                            child: Container(
+                              padding: const EdgeInsets.all(6),
+                              decoration: const BoxDecoration(
+                                color: AppColors.accent,
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.verified_rounded,
+                                size: 16,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ],
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 14),
+                      Text(
+                        _doctorName,
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: isDark
+                              ? AppColors.textPrimaryDark
+                              : AppColors.primaryDark,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        _doctorTitle,
+                        style: TextStyle(
+                          color: isDark
+                              ? AppColors.textMutedDark
+                              : AppColors.textMutedLight,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 5,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.medical_services_rounded,
+                              color: AppColors.primaryDark,
+                              size: 14,
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              loc.translate('doctorRole'),
+                              style: const TextStyle(
+                                color: AppColors.primaryDark,
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
+                const SizedBox(height: 20),
 
-              // Profile Tiles
-              ProfileTile(
-                label: loc.translate('fullName'),
-                value: _doctorName,
-                icon: Icons.person_outline_rounded,
-                onTap: _showEditProfileModal,
-              ),
-              ProfileTile(
-                label: loc.translate('phone'),
-                value: _phone,
-                icon: Icons.phone_outlined,
-                onTap: _showEditProfileModal,
-              ),
-              ProfileTile(
-                label: loc.translate('email'),
-                value: _email,
-                icon: Icons.email_outlined,
-                onTap: _showEditProfileModal,
-              ),
-              ProfileTile(
-                label: loc.translate('address'),
-                value: _address,
-                icon: Icons.location_on_outlined,
-                onTap: _showEditProfileModal,
-              ),
-              const SizedBox(height: 16),
+                // Profile Tiles
+                ProfileTile(
+                  label: loc.translate('fullName'),
+                  value: _doctorName,
+                  icon: Icons.person_outline_rounded,
+                  onTap: _showEditProfileModal,
+                ),
+                ProfileTile(
+                  label: loc.translate('phone'),
+                  value: _phone,
+                  icon: Icons.phone_outlined,
+                  onTap: _showEditProfileModal,
+                ),
+                ProfileTile(
+                  label: loc.translate('email'),
+                  value: _email,
+                  icon: Icons.email_outlined,
+                  onTap: _showEditProfileModal,
+                ),
+                ProfileTile(
+                  label: loc.translate('address'),
+                  value: _address,
+                  icon: Icons.location_on_outlined,
+                  onTap: _showEditProfileModal,
+                ),
+                const SizedBox(height: 16),
 
-              // Edit Profile Action Button
-              GradientButton(
-                text: loc.translate('editProfile').toUpperCase(),
-                icon: Icons.edit_rounded,
-                onPressed: _showEditProfileModal,
-              ),
-            ],
+                // Edit Profile Action Button
+                GradientButton(
+                  text: loc.translate('editProfile').toUpperCase(),
+                  icon: Icons.edit_rounded,
+                  onPressed: _showEditProfileModal,
+                ),
+              ],
+            ),
           ),
         ),
       ),

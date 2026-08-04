@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/utils/app_localizations.dart';
 
-/// Floating Modern Bottom Navigation Bar for rapid module switching
+/// Floating Modern Glassmorphism Bottom Navigation Bar for rapid module switching
 class BottomNavBar extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onTabSelected;
@@ -15,34 +16,41 @@ class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final loc = AppLocalizations.of(context);
 
     final primaryItems = [
-      {'label': 'Dashboard', 'icon': Icons.dashboard_rounded},
-      {'label': 'Patients', 'icon': Icons.people_alt_rounded},
-      {'label': 'Appointments', 'icon': Icons.calendar_month_rounded},
-      {'label': 'Prescriptions', 'icon': Icons.description_rounded},
-      {'label': 'Billing', 'icon': Icons.receipt_long_rounded},
+      {'label': loc.translate('navDashboard'), 'icon': Icons.grid_view_rounded},
+      {'label': loc.translate('navPatients'), 'icon': Icons.people_alt_rounded},
+      {'label': loc.translate('navAppointments'), 'icon': Icons.calendar_month_rounded},
+      {'label': loc.translate('navPrescriptions'), 'icon': Icons.description_rounded},
+      {'label': loc.translate('navBilling'), 'icon': Icons.receipt_long_rounded},
     ];
 
     return Container(
-      margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-      height: 68,
+      margin: const EdgeInsets.fromLTRB(14, 0, 14, 14),
+      height: 66,
       decoration: BoxDecoration(
-        color: isDark ? AppColors.cardDark : AppColors.cardLight,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
+        color: isDark
+            ? AppColors.glassSurfaceDark
+            : AppColors.glassSurfaceLight,
+        borderRadius: BorderRadius.circular(28),
+        boxShadow: const [
           BoxShadow(
-            color: isDark
-                ? Colors.black.withValues(alpha: 0.4)
-                : AppColors.primary.withValues(alpha: 0.12),
+            color: AppColors.shadowBlue,
             blurRadius: 20,
-            offset: const Offset(0, 8),
+            offset: Offset(0, 8),
+          ),
+          BoxShadow(
+            color: AppColors.glowBlue,
+            blurRadius: 10,
+            offset: Offset(0, 2),
           ),
         ],
         border: Border.all(
           color: isDark
-              ? Colors.white.withValues(alpha: 0.08)
-              : Colors.white.withValues(alpha: 0.8),
+              ? AppColors.glassBorderDark
+              : AppColors.glassBorderLight,
+          width: 1.5,
         ),
       ),
       child: Row(
@@ -56,32 +64,33 @@ class BottomNavBar extends StatelessWidget {
             behavior: HitTestBehavior.opaque,
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 250),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
               decoration: BoxDecoration(
                 color: isSelected
-                    ? AppColors.primary.withValues(alpha: 0.12)
+                    ? AppColors.primary.withValues(alpha: 0.18)
                     : Colors.transparent,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(20),
               ),
               child: Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(
                     item['icon'] as IconData,
                     color: isSelected
-                        ? AppColors.primary
+                        ? AppColors.primaryDark
                         : (isDark
                             ? AppColors.textMutedDark
                             : AppColors.textMutedLight),
-                    size: 24,
+                    size: 22,
                   ),
                   if (isSelected) ...[
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 6),
                     Text(
                       item['label'] as String,
                       style: const TextStyle(
-                        fontSize: 13,
+                        fontSize: 12,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.primary,
+                        color: AppColors.primaryDark,
                       ),
                     ),
                   ],

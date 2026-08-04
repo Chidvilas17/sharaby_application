@@ -11,6 +11,7 @@ import '../../shared/repositories/appointment_repository.dart';
 import '../../shared/repositories/billing_repository.dart';
 import '../../shared/repositories/patient_repository.dart';
 import '../../shared/repositories/prescription_repository.dart';
+import '../../shared/widgets/animated_glass_background.dart';
 import '../../shared/widgets/custom_search_bar.dart';
 import '../../shared/widgets/glass_card.dart';
 import '../../shared/widgets/invoice_card.dart';
@@ -74,383 +75,387 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final loc = AppLocalizations.of(context);
 
     if (_isLoading) {
-      return const Scaffold(
-        body: LoadingWidget(message: 'Loading Sharaby Dashboard...'),
+      return Scaffold(
+        body: LoadingWidget(message: loc.translate('medicalBannerTitle')),
       );
     }
 
     return Scaffold(
-      backgroundColor: isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
-      body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: _loadDashboardData,
-          color: AppColors.primary,
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.fromLTRB(20, 16, 20, 100),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Top Header: Hamburger Drawer, Doctor Greeting, Theme Toggle & Notification Badge
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        IconButton(
-                          icon: Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: isDark
-                                  ? AppColors.glassSurfaceDark
-                                  : Colors.white,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: AppColors.glassBorderLight,
-                                width: 1.2,
-                              ),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: AppColors.shadowBlue,
-                                  blurRadius: 10,
-                                ),
-                              ],
-                            ),
-                            child: const Icon(
-                              Icons.menu_rounded,
-                              color: AppColors.primary,
-                              size: 22,
-                            ),
-                          ),
-                          onPressed: () => Scaffold.of(context).openDrawer(),
-                        ),
-                        const SizedBox(width: 12),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              loc.translate('greetingDay'),
-                              style: TextStyle(
-                                fontSize: 12.5,
-                                fontWeight: FontWeight.w500,
+      body: AnimatedGlassBackground(
+        child: SafeArea(
+          child: RefreshIndicator(
+            onRefresh: _loadDashboardData,
+            color: AppColors.primary,
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 100),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Top Header: Hamburger Drawer, Doctor Greeting, Theme Toggle & Notification Badge
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          IconButton(
+                            icon: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
                                 color: isDark
-                                    ? AppColors.textMutedDark
-                                    : AppColors.textMutedLight,
+                                    ? AppColors.glassSurfaceDark
+                                    : Colors.white,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: AppColors.glassBorderLight,
+                                  width: 1.2,
+                                ),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: AppColors.shadowBlue,
+                                    blurRadius: 10,
+                                  ),
+                                ],
+                              ),
+                              child: const Icon(
+                                Icons.menu_rounded,
+                                color: AppColors.primaryDark,
+                                size: 22,
                               ),
                             ),
-                            const Text(
-                              AppConstants.defaultDoctorName,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: -0.3,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        // Theme Switcher Button
-                        IconButton(
-                          icon: Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: isDark
-                                  ? AppColors.glassSurfaceDark
-                                  : Colors.white,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: AppColors.glassBorderLight,
-                                width: 1.2,
-                              ),
-                            ),
-                            child: Icon(
-                              themeProvider.isDarkMode
-                                  ? Icons.wb_sunny_rounded
-                                  : Icons.nightlight_round,
-                              color: AppColors.primary,
-                              size: 20,
-                            ),
+                            onPressed: () => Scaffold.of(context).openDrawer(),
                           ),
-                          onPressed: () => themeProvider.toggleTheme(),
-                        ),
-                        const SizedBox(width: 6),
-                        // Notifications Button with Unread Badge
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              PageRouteBuilder(
-                                pageBuilder: (context, anim1, anim2) =>
-                                    const NotificationsScreen(),
-                                transitionsBuilder:
-                                    (context, animation, secondaryAnimation, child) => FadeTransition(
-                                  opacity: animation,
-                                  child: child,
-                                ),
-                              ),
-                            );
-                          },
-                          child: Stack(
+                          const SizedBox(width: 10),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
+                              Text(
+                                loc.translate('greetingDay'),
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
                                   color: isDark
-                                      ? AppColors.glassSurfaceDark
-                                      : Colors.white,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: AppColors.glassBorderLight,
-                                    width: 1.2,
-                                  ),
-                                ),
-                                child: const Icon(
-                                  Icons.notifications_none_rounded,
-                                  color: AppColors.primary,
-                                  size: 22,
+                                      ? AppColors.textMutedDark
+                                      : AppColors.textMutedLight,
                                 ),
                               ),
-                              Positioned(
-                                right: 6,
-                                top: 6,
-                                child: Container(
-                                  width: 9,
-                                  height: 9,
-                                  decoration: const BoxDecoration(
-                                    color: AppColors.error,
-                                    shape: BoxShape.circle,
-                                  ),
+                              const Text(
+                                AppConstants.defaultDoctorName,
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: -0.3,
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-
-                // Search Bar
-                CustomSearchBar(
-                  hintText: loc.translate('searchPlaceholder'),
-                ),
-                const SizedBox(height: 20),
-
-                // Medical Banner (Replaces "Book Appointment" hero per prompt instructions)
-                MedicalBanner(
-                  title: loc.translate('medicalBannerTitle'),
-                  subtitle: loc.translate('medicalBannerSubtitle'),
-                ),
-                const SizedBox(height: 24),
-
-                // Quick Actions Row
-                Text(
-                  loc.translate('quickActions'),
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: isDark
-                        ? AppColors.textPrimaryDark
-                        : AppColors.textPrimaryLight,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    _buildQuickActionTile(
-                      context: context,
-                      label: loc.translate('actionAddPatient'),
-                      icon: Icons.person_add_alt_1_rounded,
-                      color: AppColors.primary,
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (_) => AddEditPatientDialog(
-                            onSaved: (p) => _loadDashboardData(),
-                          ),
-                        );
-                      },
-                    ),
-                    const SizedBox(width: 10),
-                    _buildQuickActionTile(
-                      context: context,
-                      label: loc.translate('actionNewPrescription'),
-                      icon: Icons.post_add_rounded,
-                      color: AppColors.accent,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const CreatePrescriptionScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                    const SizedBox(width: 10),
-                    _buildQuickActionTile(
-                      context: context,
-                      label: loc.translate('actionCreateInvoice'),
-                      icon: Icons.receipt_rounded,
-                      color: AppColors.success,
-                      onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text('New invoice form opened')),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
-
-                // Statistics Grid Cards
-                Text(
-                  'Clinic Overview',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: isDark
-                        ? AppColors.textPrimaryDark
-                        : AppColors.textPrimaryLight,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                GridView.count(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                  shrinkWrap: true,
-                  childAspectRatio: 1.35,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: [
-                    StatCard(
-                      title: loc.translate('statTotalPatients'),
-                      value: "1,248",
-                      icon: Icons.people_alt_rounded,
-                      color: AppColors.primary,
-                      trend: "+12%",
-                      isPositive: true,
-                    ),
-                    StatCard(
-                      title: loc.translate('statAppointments'),
-                      value: "${_todaysAppointments.length}",
-                      icon: Icons.calendar_month_rounded,
-                      color: AppColors.accent,
-                      trend: "+5%",
-                      isPositive: true,
-                    ),
-                    StatCard(
-                      title: loc.translate('statPrescriptions'),
-                      value: "342",
-                      icon: Icons.description_rounded,
-                      color: AppColors.success,
-                      trend: "+8%",
-                      isPositive: true,
-                    ),
-                    StatCard(
-                      title: loc.translate('statBilling'),
-                      value: "EGP 45,800",
-                      icon: Icons.account_balance_wallet_rounded,
-                      color: AppColors.info,
-                      trend: "+15%",
-                      isPositive: true,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
-
-                // Today's Activity Log Section
-                SectionHeader(
-                  title: loc.translate('todaysActivity'),
-                ),
-                const SizedBox(height: 12),
-                GlassCard(
-                  padding: const EdgeInsets.all(16),
-                  borderRadius: 20,
-                  child: Column(
-                    children: [
-                      _buildActivityItem(
-                        icon: Icons.check_circle_rounded,
-                        color: AppColors.success,
-                        title: 'Dental Checkup Completed',
-                        subtitle: 'Patient Sarah Mansour • 09:30 AM',
+                        ],
                       ),
-                      const Divider(height: 16),
-                      _buildActivityItem(
-                        icon: Icons.access_time_filled_rounded,
-                        color: AppColors.warning,
-                        title: 'Appointment In Progress',
-                        subtitle: 'Patient Mohamed Ali • 11:00 AM',
-                      ),
-                      const Divider(height: 16),
-                      _buildActivityItem(
-                        icon: Icons.receipt_long_rounded,
-                        color: AppColors.primary,
-                        title: 'Payment Received (EGP 850)',
-                        subtitle: 'Invoice #INV-2026-042 • 11:45 AM',
+                      Row(
+                        children: [
+                          // Theme Switcher Button
+                          IconButton(
+                            icon: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: isDark
+                                    ? AppColors.glassSurfaceDark
+                                    : Colors.white,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: AppColors.glassBorderLight,
+                                  width: 1.2,
+                                ),
+                              ),
+                              child: Icon(
+                                themeProvider.isDarkMode
+                                    ? Icons.wb_sunny_rounded
+                                    : Icons.nightlight_round,
+                                color: AppColors.primaryDark,
+                                size: 20,
+                              ),
+                            ),
+                            onPressed: () => themeProvider.toggleTheme(),
+                          ),
+                          const SizedBox(width: 6),
+                          // Notifications Button with Unread Badge
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  pageBuilder: (context, anim1, anim2) =>
+                                      const NotificationsScreen(),
+                                  transitionsBuilder:
+                                      (context, animation, secondaryAnimation, child) => FadeTransition(
+                                    opacity: animation,
+                                    child: child,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Stack(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: isDark
+                                        ? AppColors.glassSurfaceDark
+                                        : Colors.white,
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: AppColors.glassBorderLight,
+                                      width: 1.2,
+                                    ),
+                                  ),
+                                  child: const Icon(
+                                    Icons.notifications_none_rounded,
+                                    color: AppColors.primaryDark,
+                                    size: 22,
+                                  ),
+                                ),
+                                Positioned(
+                                  right: 6,
+                                  top: 6,
+                                  child: Container(
+                                    width: 9,
+                                    height: 9,
+                                    decoration: const BoxDecoration(
+                                      color: AppColors.error,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ),
-                const SizedBox(height: 24),
+                  const SizedBox(height: 20),
 
-                // Recent Patients Section
-                SectionHeader(
-                  title: loc.translate('recentPatients'),
-                  actionText: loc.translate('viewAll'),
-                  onActionTap: () {},
-                ),
-                const SizedBox(height: 12),
-                Column(
-                  children: _recentPatients
-                      .map(
-                        (patient) => PatientCard(patient: patient),
-                      )
-                      .toList(),
-                ),
-                const SizedBox(height: 20),
+                  // Search Bar
+                  CustomSearchBar(
+                    hintText: loc.translate('searchPlaceholder'),
+                  ),
+                  const SizedBox(height: 20),
 
-                // Recent Prescriptions Section
-                SectionHeader(
-                  title: loc.translate('recentPrescriptions'),
-                  actionText: loc.translate('viewAll'),
-                  onActionTap: () {},
-                ),
-                const SizedBox(height: 12),
-                Column(
-                  children: _recentPrescriptions
-                      .map(
-                        (rx) => Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
-                          child: PrescriptionCard(prescription: rx),
+                  // Medical Banner (Replaces "Book Appointment" per requirements)
+                  MedicalBanner(
+                    title: loc.translate('medicalBannerTitle'),
+                    subtitle: loc.translate('medicalBannerSubtitle'),
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Quick Actions Row
+                  Text(
+                    loc.translate('quickActions'),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: isDark
+                          ? AppColors.textPrimaryDark
+                          : AppColors.primaryDark,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      _buildQuickActionTile(
+                        context: context,
+                        label: loc.translate('actionAddPatient'),
+                        icon: Icons.person_add_alt_1_rounded,
+                        color: AppColors.primaryDark,
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (_) => AddEditPatientDialog(
+                              onSaved: (p) => _loadDashboardData(),
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(width: 10),
+                      _buildQuickActionTile(
+                        context: context,
+                        label: loc.translate('actionNewPrescription'),
+                        icon: Icons.post_add_rounded,
+                        color: AppColors.accent,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const CreatePrescriptionScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(width: 10),
+                      _buildQuickActionTile(
+                        context: context,
+                        label: loc.translate('actionViewReports'),
+                        icon: Icons.analytics_rounded,
+                        color: AppColors.success,
+                        onTap: () {
+                          // Navigate to reports tab via Shell notification or dialog
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(loc.translate('navReports')),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Statistics Grid Cards
+                  Text(
+                    loc.translate('clinicOverview'),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: isDark
+                          ? AppColors.textPrimaryDark
+                          : AppColors.primaryDark,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  GridView.count(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                    shrinkWrap: true,
+                    childAspectRatio: 1.15,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: [
+                      StatCard(
+                        title: loc.translate('statTotalPatients'),
+                        value: "1,248",
+                        icon: Icons.people_alt_rounded,
+                        color: AppColors.primaryDark,
+                        trend: "+12%",
+                        isPositive: true,
+                      ),
+                      StatCard(
+                        title: loc.translate('statAppointments'),
+                        value: "${_todaysAppointments.length}",
+                        icon: Icons.calendar_month_rounded,
+                        color: AppColors.accent,
+                        trend: "+5%",
+                        isPositive: true,
+                      ),
+                      StatCard(
+                        title: loc.translate('statPrescriptions'),
+                        value: "342",
+                        icon: Icons.description_rounded,
+                        color: AppColors.success,
+                        trend: "+8%",
+                        isPositive: true,
+                      ),
+                      StatCard(
+                        title: loc.translate('statBilling'),
+                        value: "EGP 45,800",
+                        isFinancial: true,
+                        icon: Icons.account_balance_wallet_rounded,
+                        color: AppColors.info,
+                        trend: "+15%",
+                        isPositive: true,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Today's Activity Log Section
+                  SectionHeader(
+                    title: loc.translate('todaysActivity'),
+                  ),
+                  const SizedBox(height: 12),
+                  GlassCard(
+                    padding: const EdgeInsets.all(16),
+                    borderRadius: 20,
+                    child: Column(
+                      children: [
+                        _buildActivityItem(
+                          icon: Icons.check_circle_rounded,
+                          color: AppColors.success,
+                          title: 'Dental Checkup Completed',
+                          subtitle: 'Patient Sarah Mansour • 09:30 AM',
                         ),
-                      )
-                      .toList(),
-                ),
-                const SizedBox(height: 20),
-
-                // Recent Billing Invoices
-                SectionHeader(
-                  title: loc.translate('recentBilling'),
-                  actionText: loc.translate('viewAll'),
-                  onActionTap: () {},
-                ),
-                const SizedBox(height: 12),
-                Column(
-                  children: _recentInvoices
-                      .map(
-                        (inv) => Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
-                          child: InvoiceCard(invoice: inv),
+                        const Divider(height: 16),
+                        _buildActivityItem(
+                          icon: Icons.access_time_filled_rounded,
+                          color: AppColors.warning,
+                          title: 'Appointment In Progress',
+                          subtitle: 'Patient Mohamed Ali • 11:00 AM',
                         ),
-                      )
-                      .toList(),
-                ),
-              ],
+                        const Divider(height: 16),
+                        _buildActivityItem(
+                          icon: Icons.receipt_long_rounded,
+                          color: AppColors.primaryDark,
+                          title: 'Payment Received (EGP 850)',
+                          subtitle: 'Invoice #INV-2026-042 • 11:45 AM',
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Recent Patients Section
+                  SectionHeader(
+                    title: loc.translate('recentPatients'),
+                    actionText: loc.translate('viewAll'),
+                    onActionTap: () {},
+                  ),
+                  const SizedBox(height: 12),
+                  Column(
+                    children: _recentPatients
+                        .map(
+                          (patient) => PatientCard(patient: patient),
+                        )
+                        .toList(),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Recent Prescriptions Section
+                  SectionHeader(
+                    title: loc.translate('recentPrescriptions'),
+                    actionText: loc.translate('viewAll'),
+                    onActionTap: () {},
+                  ),
+                  const SizedBox(height: 12),
+                  Column(
+                    children: _recentPrescriptions
+                        .map(
+                          (rx) => Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: PrescriptionCard(prescription: rx),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Recent Billing Invoices
+                  SectionHeader(
+                    title: loc.translate('recentBilling'),
+                    actionText: loc.translate('viewAll'),
+                    onActionTap: () {},
+                  ),
+                  const SizedBox(height: 12),
+                  Column(
+                    children: _recentInvoices
+                        .map(
+                          (inv) => Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: InvoiceCard(invoice: inv),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

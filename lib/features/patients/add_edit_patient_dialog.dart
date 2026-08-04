@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_enums.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/utils/app_localizations.dart';
 import '../../shared/models/patient_model.dart';
 import '../../shared/repositories/patient_repository.dart';
 import '../../shared/widgets/gradient_button.dart';
@@ -43,7 +44,7 @@ class _AddEditPatientDialogState extends State<AddEditPatientDialog> {
     _phoneController = TextEditingController(text: p?.phone ?? '');
     _emailController = TextEditingController(text: p?.email ?? '');
     _bloodTypeController = TextEditingController(text: p?.bloodType ?? 'O+');
-    _historyController = TextEditingController(text: p?.medicalHistory ?? 'None');
+    _historyController = TextEditingController(text: p?.medicalHistory ?? '');
 
     if (p != null) {
       _gender = p.gender;
@@ -86,6 +87,7 @@ class _AddEditPatientDialogState extends State<AddEditPatientDialog> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final loc = AppLocalizations.of(context);
     final isEditing = widget.patientToEdit != null;
 
     return Dialog(
@@ -103,11 +105,11 @@ class _AddEditPatientDialogState extends State<AddEditPatientDialog> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    isEditing ? 'Edit Patient File' : 'Add New Patient',
+                    isEditing ? loc.translate('editPatient') : loc.translate('addNewPatient'),
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+                      color: isDark ? AppColors.textPrimaryDark : AppColors.primaryDark,
                     ),
                   ),
                   IconButton(
@@ -120,8 +122,12 @@ class _AddEditPatientDialogState extends State<AddEditPatientDialog> {
 
               TextFormField(
                 controller: _nameController,
-                decoration: const InputDecoration(labelText: 'Full Name', prefixIcon: Icon(Icons.person_outlined)),
-                validator: (val) => val == null || val.isEmpty ? 'Required' : null,
+                decoration: InputDecoration(
+                  labelText: loc.translate('fullName'),
+                  prefixIcon: const Icon(Icons.person_outlined, color: AppColors.primary),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                ),
+                validator: (val) => val == null || val.isEmpty ? loc.translate('fillRequiredFields') : null,
               ),
               const SizedBox(height: 12),
 
@@ -131,7 +137,10 @@ class _AddEditPatientDialogState extends State<AddEditPatientDialog> {
                     child: TextFormField(
                       controller: _ageController,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Age'),
+                      decoration: InputDecoration(
+                        labelText: loc.translate('age'),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                      ),
                       validator: (val) => val == null || val.isEmpty ? 'Required' : null,
                     ),
                   ),
@@ -139,10 +148,14 @@ class _AddEditPatientDialogState extends State<AddEditPatientDialog> {
                   Expanded(
                     child: DropdownButtonFormField<PatientGender>(
                       initialValue: _gender,
-                      decoration: const InputDecoration(labelText: 'Gender'),
-                      items: PatientGender.values.map((g) {
-                        return DropdownMenuItem(value: g, child: Text(g.name.toUpperCase()));
-                      }).toList(),
+                      decoration: InputDecoration(
+                        labelText: loc.translate('gender'),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                      ),
+                      items: [
+                        DropdownMenuItem(value: PatientGender.male, child: Text(loc.translate('male'))),
+                        DropdownMenuItem(value: PatientGender.female, child: Text(loc.translate('female'))),
+                      ],
                       onChanged: (v) {
                         if (v != null) setState(() => _gender = v);
                       },
@@ -155,35 +168,53 @@ class _AddEditPatientDialogState extends State<AddEditPatientDialog> {
               TextFormField(
                 controller: _phoneController,
                 keyboardType: TextInputType.phone,
-                decoration: const InputDecoration(labelText: 'Phone Number', prefixIcon: Icon(Icons.phone_outlined)),
-                validator: (val) => val == null || val.isEmpty ? 'Required' : null,
+                decoration: InputDecoration(
+                  labelText: loc.translate('phone'),
+                  prefixIcon: const Icon(Icons.phone_outlined, color: AppColors.primary),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                ),
+                validator: (val) => val == null || val.isEmpty ? loc.translate('fillRequiredFields') : null,
               ),
               const SizedBox(height: 12),
 
               TextFormField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(labelText: 'Email Address', prefixIcon: Icon(Icons.email_outlined)),
+                decoration: InputDecoration(
+                  labelText: loc.translate('email'),
+                  prefixIcon: const Icon(Icons.email_outlined, color: AppColors.primary),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                ),
               ),
               const SizedBox(height: 12),
 
               TextFormField(
                 controller: _bloodTypeController,
-                decoration: const InputDecoration(labelText: 'Blood Type (e.g. O+, A-)', prefixIcon: Icon(Icons.water_drop_outlined)),
+                decoration: InputDecoration(
+                  labelText: 'Blood Type (O+, A-)',
+                  prefixIcon: const Icon(Icons.water_drop_outlined, color: AppColors.primary),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                ),
               ),
               const SizedBox(height: 12),
 
               TextFormField(
                 controller: _historyController,
                 maxLines: 2,
-                decoration: const InputDecoration(labelText: 'Medical History'),
+                decoration: InputDecoration(
+                  labelText: loc.translate('medicalHistory'),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                ),
               ),
               const SizedBox(height: 20),
 
               GradientButton(
-                text: isEditing ? 'UPDATE PATIENT' : 'SAVE PATIENT RECORD',
+                text: isEditing
+                    ? loc.translate('saveChanges').toUpperCase()
+                    : loc.translate('addNewPatient').toUpperCase(),
                 isLoading: _isLoading,
                 onPressed: _submit,
+                borderRadius: 28,
               ),
             ],
           ),

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_enums.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/utils/app_localizations.dart';
 import '../../shared/models/appointment_model.dart';
 import '../../shared/repositories/appointment_repository.dart';
+import '../../shared/widgets/animated_glass_background.dart';
 import '../../shared/widgets/appointment_card.dart';
+import '../../shared/widgets/custom_app_bar.dart';
 import '../../shared/widgets/empty_state_widget.dart';
 import '../../shared/widgets/loading_widget.dart';
 import 'book_appointment_dialog.dart';
@@ -50,93 +53,93 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final loc = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Appointments Schedule'),
-        centerTitle: false,
-        leading: IconButton(
-          icon: const Icon(Icons.menu_rounded, color: AppColors.primary),
-          onPressed: () => Scaffold.of(context).openDrawer(),
-        ),
-        bottom: TabBar(
-          controller: _tabController,
-          labelColor: AppColors.primary,
-          unselectedLabelColor: isDark
-              ? AppColors.textMutedDark
-              : AppColors.textMutedLight,
-          indicatorColor: AppColors.primary,
-          tabs: const [
-            Tab(text: 'All'),
-            Tab(text: 'Confirmed'),
-            Tab(text: 'In Progress'),
-            Tab(text: 'Completed'),
-          ],
-        ),
+      appBar: CustomAppBar(
+        title: loc.translate('navAppointments'),
       ),
-      body: _isLoading
-          ? const LoadingWidget(message: 'Loading schedule...')
-          : SafeArea(
-              child: Column(
-                children: [
-                  // Horizontal Date Picker Bar
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                    color: isDark ? AppColors.cardDark : AppColors.cardLight,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            const Icon(Icons.calendar_today_rounded,
-                                color: AppColors.primary, size: 20),
-                            const SizedBox(width: 10),
-                            Text(
-                              '${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+      body: AnimatedGlassBackground(
+        child: _isLoading
+            ? LoadingWidget(message: loc.translate('navAppointments'))
+            : SafeArea(
+                child: Column(
+                  children: [
+                    // Horizontal Date Picker Bar
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                      color: isDark ? AppColors.cardDark.withValues(alpha: 0.8) : Colors.white.withValues(alpha: 0.8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(Icons.calendar_today_rounded,
+                                  color: AppColors.primaryDark, size: 20),
+                              const SizedBox(width: 10),
+                              Text(
+                                '${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        TextButton.icon(
-                          onPressed: () async {
-                            final picked = await showDatePicker(
-                              context: context,
-                              initialDate: _selectedDate,
-                              firstDate: DateTime(2025),
-                              lastDate: DateTime(2030),
-                            );
-                            if (picked != null) {
-                              setState(() => _selectedDate = picked);
-                            }
-                          },
-                          icon: const Icon(Icons.edit_calendar_rounded, size: 18),
-                          label: const Text('Select Date'),
-                        ),
-                      ],
+                            ],
+                          ),
+                          TextButton.icon(
+                            onPressed: () async {
+                              final picked = await showDatePicker(
+                                context: context,
+                                initialDate: _selectedDate,
+                                firstDate: DateTime(2025),
+                                lastDate: DateTime(2030),
+                              );
+                              if (picked != null) {
+                                setState(() => _selectedDate = picked);
+                              }
+                            },
+                            icon: const Icon(Icons.edit_calendar_rounded, size: 18, color: AppColors.primaryDark),
+                            label: const Text('Select Date', style: TextStyle(color: AppColors.primaryDark)),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
 
-                  // Tab Views
-                  Expanded(
-                    child: TabBarView(
+                    // Tab Bar
+                    TabBar(
                       controller: _tabController,
-                      children: [
-                        _buildAppointmentList(_appointments),
-                        _buildAppointmentList(
-                            _filterByStatus(AppointmentStatus.confirmed)),
-                        _buildAppointmentList(
-                            _filterByStatus(AppointmentStatus.inProgress)),
-                        _buildAppointmentList(
-                            _filterByStatus(AppointmentStatus.completed)),
+                      labelColor: AppColors.primaryDark,
+                      unselectedLabelColor: isDark
+                          ? AppColors.textMutedDark
+                          : AppColors.textMutedLight,
+                      indicatorColor: AppColors.primaryDark,
+                      tabs: [
+                        Tab(text: loc.translate('all')),
+                        const Tab(text: 'Confirmed'),
+                        const Tab(text: 'In Progress'),
+                        const Tab(text: 'Completed'),
                       ],
                     ),
-                  ),
-                ],
+
+                    // Tab Views
+                    Expanded(
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: [
+                          _buildAppointmentList(_appointments),
+                          _buildAppointmentList(
+                              _filterByStatus(AppointmentStatus.confirmed)),
+                          _buildAppointmentList(
+                              _filterByStatus(AppointmentStatus.inProgress)),
+                          _buildAppointmentList(
+                              _filterByStatus(AppointmentStatus.completed)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
+      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           showDialog(
@@ -146,19 +149,23 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
             ),
           );
         },
-        icon: const Icon(Icons.add_task_rounded),
-        label: const Text('Book Appointment'),
+        backgroundColor: AppColors.primaryDark,
+        elevation: 6,
+        icon: const Icon(Icons.add_task_rounded, color: Colors.white),
+        label: const Text('Book Appointment', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
       ),
     );
   }
 
   Widget _buildAppointmentList(List<AppointmentModel> list) {
+    final loc = AppLocalizations.of(context);
+
     if (list.isEmpty) {
       return EmptyStateWidget(
-        title: 'No Appointments Scheduled',
-        message: 'There are no appointments matching this category.',
+        title: loc.translate('noFilesMatch'),
+        message: loc.translate('noFilesMatch'),
         icon: Icons.event_available_rounded,
-        buttonText: 'Book New Appointment',
+        buttonText: 'Book Appointment',
         onButtonPressed: () {
           showDialog(
             context: context,
@@ -171,7 +178,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
     }
 
     return ListView.builder(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 90),
       itemCount: list.length,
       itemBuilder: (context, index) {
         final appointment = list[index];

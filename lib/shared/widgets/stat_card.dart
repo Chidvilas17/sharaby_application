@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import 'glass_card.dart';
+import 'protected_financial_text.dart';
 
 /// Reusable Glassmorphism Stat Card for Dashboard Metrics
 class StatCard extends StatelessWidget {
@@ -10,6 +11,7 @@ class StatCard extends StatelessWidget {
   final Color color;
   final String? trend;
   final bool isPositive;
+  final bool isFinancial;
   final VoidCallback? onTap;
 
   const StatCard({
@@ -20,16 +22,26 @@ class StatCard extends StatelessWidget {
     required this.color,
     this.trend,
     this.isPositive = true,
+    this.isFinancial = false,
     this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final checkFinancial = isFinancial || value.contains('EGP') || value.contains('\$');
+    final formattedValue = value.replaceAll('\$', 'EGP ');
+
+    final valueStyle = TextStyle(
+      fontSize: 20,
+      fontWeight: FontWeight.bold,
+      letterSpacing: -0.5,
+      color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+    );
 
     return GlassCard(
       onTap: onTap,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(14),
       borderRadius: 20,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,7 +51,7 @@ class StatCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: color.withValues(alpha: 0.15),
                   shape: BoxShape.circle,
@@ -48,7 +60,7 @@ class StatCard extends StatelessWidget {
                     width: 1.5,
                   ),
                 ),
-                child: Icon(icon, color: color, size: 22),
+                child: Icon(icon, color: color, size: 20),
               ),
               if (trend != null)
                 Container(
@@ -64,14 +76,14 @@ class StatCard extends StatelessWidget {
                         isPositive
                             ? Icons.trending_up_rounded
                             : Icons.trending_down_rounded,
-                        size: 14,
+                        size: 13,
                         color: isPositive ? AppColors.success : AppColors.error,
                       ),
                       const SizedBox(width: 4),
                       Text(
                         trend!,
                         style: TextStyle(
-                          fontSize: 11,
+                          fontSize: 10.5,
                           fontWeight: FontWeight.bold,
                           color: isPositive ? AppColors.success : AppColors.error,
                         ),
@@ -81,23 +93,25 @@ class StatCard extends StatelessWidget {
                 ),
             ],
           ),
-          const SizedBox(height: 12),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              letterSpacing: -0.5,
-              color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
-            ),
-          ),
+          const SizedBox(height: 8),
+          checkFinancial
+              ? ProtectedFinancialText(
+                  actualValue: formattedValue,
+                  style: valueStyle,
+                )
+              : Text(
+                  formattedValue,
+                  style: valueStyle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
           const SizedBox(height: 2),
           Text(
             title,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 11.5,
               fontWeight: FontWeight.w500,
               color: isDark ? AppColors.textMutedDark : AppColors.textMutedLight,
             ),

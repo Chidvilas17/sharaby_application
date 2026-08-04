@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 
-/// Reusable Modern Glossy Gradient Button with press micro-animation & glowing shadow
+/// Reusable Modern Glossy Pill-shaped Gradient Button with press micro-animation & glowing border shadow
 class GradientButton extends StatefulWidget {
   final String text;
   final VoidCallback? onPressed;
@@ -21,7 +21,7 @@ class GradientButton extends StatefulWidget {
     this.isLoading = false,
     this.height = 54,
     this.width,
-    this.borderRadius = 16,
+    this.borderRadius = 28,
     this.gradient = AppColors.primaryGradient,
     this.textColor = Colors.white,
   });
@@ -48,16 +48,22 @@ class _GradientButtonState extends State<GradientButton> {
           gradient: isEnabled ? widget.gradient : null,
           color: isEnabled ? null : Colors.grey.shade300,
           borderRadius: BorderRadius.circular(widget.borderRadius),
+          border: isEnabled
+              ? Border.all(
+                  color: Colors.white.withValues(alpha: 0.35),
+                  width: 1.2,
+                )
+              : null,
           boxShadow: isEnabled
               ? [
                   BoxShadow(
-                    color: AppColors.primary.withValues(alpha: 0.35),
-                    blurRadius: 16,
+                    color: AppColors.primary.withValues(alpha: 0.4),
+                    blurRadius: 18,
                     offset: const Offset(0, 6),
                   ),
                   const BoxShadow(
                     color: AppColors.glowBlue,
-                    blurRadius: 8,
+                    blurRadius: 10,
                     offset: Offset(0, 2),
                   )
                 ]
@@ -81,23 +87,31 @@ class _GradientButtonState extends State<GradientButton> {
                         strokeWidth: 2.5,
                       ),
                     )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if (widget.icon != null) ...[
-                          Icon(widget.icon, color: widget.textColor, size: 20),
-                          const SizedBox(width: 8),
-                        ],
-                        Text(
-                          widget.text,
-                          style: TextStyle(
-                            color: widget.textColor,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 0.3,
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (widget.icon != null) ...[
+                            Icon(widget.icon, color: widget.textColor, size: 20),
+                            const SizedBox(width: 8),
+                          ],
+                          Flexible(
+                            child: Text(
+                              widget.text,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: widget.textColor,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.3,
+                              ),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
             ),
           ),

@@ -1,4 +1,4 @@
-/// Custom formatters for dates, times, and currencies without external package bloat
+/// Custom formatters for dates, times, and currencies
 class AppFormatters {
   static String formatDate(DateTime date) {
     final months = [
@@ -29,8 +29,24 @@ class AppFormatters {
     return '${formatDate(dt)} at ${formatTime(dt)}';
   }
 
-  static String formatCurrency(double amount, {String currency = '\$'}) {
-    final formatted = amount.toStringAsFixed(2);
-    return '$currency$formatted';
+  /// Formats amounts using Egyptian Pound currency (EGP) with thousands separation
+  static String formatCurrency(double amount, {String currency = 'EGP'}) {
+    final isNegative = amount < 0;
+    final absAmount = amount.abs();
+    final parts = absAmount.toStringAsFixed(amount % 1 == 0 ? 0 : 2).split('.');
+    
+    // Add comma separators
+    final integerPart = parts[0];
+    final buffer = StringBuffer();
+    for (int i = 0; i < integerPart.length; i++) {
+      if (i > 0 && (integerPart.length - i) % 3 == 0) {
+        buffer.write(',');
+      }
+      buffer.write(integerPart[i]);
+    }
+    
+    final formattedNumber = parts.length > 1 ? '${buffer.toString()}.${parts[1]}' : buffer.toString();
+    final sign = isNegative ? '-' : '';
+    return '$currency $sign$formattedNumber';
   }
 }
