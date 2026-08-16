@@ -70,16 +70,15 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
     setState(() => _isExporting = true);
 
     try {
-      final csvHeader = "Patient Name,Age,Gender,Phone,Diagnosis,Appointment Date,Doctor\n";
+      final csvHeader = "Child Name,Age,Gender,Parent Phone,Weight,Growth Status,Vaccination Status,Doctor\n";
       final samplePatients = [
-        "Sarah Mansour,28,Female,01012345678,Dental Caries Checkup,2026-08-04,Dr. Ahmed Sharaby",
-        "Mohamed Ali,42,Male,01198765432,Hypertension Follow-up,2026-08-04,Dr. Ahmed Sharaby",
-        "Khaled Mahmoud,35,Male,01234567890,Routine Physical Exam,2026-08-03,Dr. Ahmed Sharaby",
-        "Nour El-Din,19,Female,01555555555,Allergic Rhinitis,2026-08-02,Dr. Ahmed Sharaby",
-        "Omar Hassan,50,Male,01099998888,Type-2 Diabetes Consultation,2026-08-01,Dr. Ahmed Sharaby",
-        "Youssef Ibrahim,31,Male,01011112222,General Consultation,2026-07-30,Dr. Ahmed Sharaby",
-        "Mona Zaki,26,Female,01244443333,Orthodontic Evaluation,2026-07-28,Dr. Ahmed Sharaby",
+        "Adam Mohamed,4,Male,01012345678,17 kg,Normal Development (50th percentile),Up to Date,Dr. Ahmed Sharaby",
+        "Lina Ahmed,7,Female,01029876543,24 kg,Healthy Growth (75th percentile),Completed Primary Series,Dr. Ahmed Sharaby",
+        "Youssef Ali,2,Male,01055554321,12 kg,Normal Development (60th percentile),MMR Booster Due,Dr. Ahmed Sharaby",
+        "Nour Hassan,1,Female,01043332211,8.5 kg,Healthy Infant (45th percentile),9-Month Vaccine Completed,Dr. Ahmed Sharaby",
+        "Omar Youssef,12,Male,01099998888,42 kg,Growth Spurt Phase,Up to Date,Dr. Ahmed Sharaby",
       ];
+
 
       final csvData = csvHeader + samplePatients.join("\n");
 

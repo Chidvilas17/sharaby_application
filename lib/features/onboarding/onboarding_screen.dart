@@ -64,22 +64,23 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       {
         'title': loc.translate('onboarding1Title'),
         'desc': loc.translate('onboarding1Desc'),
-        'badge': 'MODERN HOSPITAL',
-        'icon': Icons.local_hospital_rounded,
+        'badge': 'PEDIATRIC HEALTHCARE',
+        'icon': Icons.child_care_rounded,
       },
       {
         'title': loc.translate('onboarding2Title'),
         'desc': loc.translate('onboarding2Desc'),
-        'badge': 'DOCTOR & PATIENT',
-        'icon': Icons.people_alt_rounded,
+        'badge': 'PEDIATRIC PATIENTS',
+        'icon': Icons.escalator_warning_rounded,
       },
       {
         'title': loc.translate('onboarding3Title'),
         'desc': loc.translate('onboarding3Desc'),
-        'badge': 'REAL-TIME CLINIC ACCESS',
-        'icon': Icons.phone_android_rounded,
+        'badge': 'GROWTH & VACCINATIONS',
+        'icon': Icons.health_and_safety_rounded,
       },
     ];
+
 
     return Scaffold(
       body: AnimatedGlassBackground(

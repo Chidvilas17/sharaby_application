@@ -26,8 +26,11 @@ class _AddEditPatientDialogState extends State<AddEditPatientDialog> {
 
   late TextEditingController _nameController;
   late TextEditingController _ageController;
+  late TextEditingController _fatherNameController;
+  late TextEditingController _motherNameController;
   late TextEditingController _phoneController;
-  late TextEditingController _emailController;
+  late TextEditingController _weightController;
+  late TextEditingController _heightController;
   late TextEditingController _bloodTypeController;
   late TextEditingController _historyController;
 
@@ -40,10 +43,13 @@ class _AddEditPatientDialogState extends State<AddEditPatientDialog> {
     super.initState();
     final p = widget.patientToEdit;
     _nameController = TextEditingController(text: p?.fullName ?? '');
-    _ageController = TextEditingController(text: p != null ? '${p.age}' : '30');
+    _ageController = TextEditingController(text: p != null ? '${p.age}' : '4');
+    _fatherNameController = TextEditingController(text: p?.fatherName ?? '');
+    _motherNameController = TextEditingController(text: p?.motherName ?? '');
     _phoneController = TextEditingController(text: p?.phone ?? '');
-    _emailController = TextEditingController(text: p?.email ?? '');
-    _bloodTypeController = TextEditingController(text: p?.bloodType ?? 'O+');
+    _weightController = TextEditingController(text: p?.weight ?? '17 kg');
+    _heightController = TextEditingController(text: p?.height ?? '102 cm');
+    _bloodTypeController = TextEditingController(text: p?.bloodType ?? 'A+');
     _historyController = TextEditingController(text: p?.medicalHistory ?? '');
 
     if (p != null) {
@@ -59,16 +65,25 @@ class _AddEditPatientDialogState extends State<AddEditPatientDialog> {
     final newPatient = PatientModel(
       id: widget.patientToEdit?.id ?? 'P${1000 + DateTime.now().millisecond}',
       fullName: _nameController.text.trim(),
-      age: int.tryParse(_ageController.text.trim()) ?? 30,
+      age: int.tryParse(_ageController.text.trim()) ?? 4,
       gender: _gender,
       phone: _phoneController.text.trim(),
-      email: _emailController.text.trim(),
+      email: widget.patientToEdit?.email ?? 'guardian@email.com',
       bloodType: _bloodTypeController.text.trim(),
       status: _status,
       lastVisitDate: widget.patientToEdit?.lastVisitDate ?? 'Today',
-      medicalHistory: _historyController.text.trim(),
+      medicalHistory: _historyController.text.trim().isEmpty
+          ? 'Routine Pediatric Assessment'
+          : _historyController.text.trim(),
       allergies: widget.patientToEdit?.allergies ?? 'None',
-      emergencyContact: widget.patientToEdit?.emergencyContact ?? 'N/A',
+      emergencyContact: '${_fatherNameController.text.trim().isNotEmpty ? _fatherNameController.text.trim() : 'Father'} - ${_phoneController.text.trim()}',
+      fatherName: _fatherNameController.text.trim(),
+      motherName: _motherNameController.text.trim(),
+      guardianPhone: _phoneController.text.trim(),
+      weight: _weightController.text.trim().isEmpty ? '17 kg' : _weightController.text.trim(),
+      height: _heightController.text.trim().isEmpty ? '102 cm' : _heightController.text.trim(),
+      growthStatus: widget.patientToEdit?.growthStatus ?? 'Normal Development (50th percentile)',
+      vaccinationStatus: widget.patientToEdit?.vaccinationStatus ?? 'Up to Date',
     );
 
     if (widget.patientToEdit != null) {
@@ -120,17 +135,19 @@ class _AddEditPatientDialogState extends State<AddEditPatientDialog> {
               ),
               const SizedBox(height: 16),
 
+              // Child Name
               TextFormField(
                 controller: _nameController,
                 decoration: InputDecoration(
-                  labelText: loc.translate('fullName'),
-                  prefixIcon: const Icon(Icons.person_outlined, color: AppColors.primary),
+                  labelText: loc.translate('childName'),
+                  prefixIcon: const Icon(Icons.child_care_rounded, color: AppColors.primary),
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
                 ),
                 validator: (val) => val == null || val.isEmpty ? loc.translate('fillRequiredFields') : null,
               ),
               const SizedBox(height: 12),
 
+              // Age & Gender
               Row(
                 children: [
                   Expanded(
@@ -138,7 +155,7 @@ class _AddEditPatientDialogState extends State<AddEditPatientDialog> {
                       controller: _ageController,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                        labelText: loc.translate('age'),
+                        labelText: '${loc.translate('age')} (years)',
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
                       ),
                       validator: (val) => val == null || val.isEmpty ? 'Required' : null,
@@ -165,11 +182,62 @@ class _AddEditPatientDialogState extends State<AddEditPatientDialog> {
               ),
               const SizedBox(height: 12),
 
+              // Weight & Height
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: _weightController,
+                      decoration: InputDecoration(
+                        labelText: loc.translate('weight'),
+                        prefixIcon: const Icon(Icons.monitor_weight_outlined, color: AppColors.primary),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _heightController,
+                      decoration: InputDecoration(
+                        labelText: loc.translate('height'),
+                        prefixIcon: const Icon(Icons.height_rounded, color: AppColors.primary),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+
+              // Father Name
+              TextFormField(
+                controller: _fatherNameController,
+                decoration: InputDecoration(
+                  labelText: loc.translate('fatherName'),
+                  prefixIcon: const Icon(Icons.person_outline, color: AppColors.primary),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                ),
+              ),
+              const SizedBox(height: 12),
+
+              // Mother Name
+              TextFormField(
+                controller: _motherNameController,
+                decoration: InputDecoration(
+                  labelText: loc.translate('motherName'),
+                  prefixIcon: const Icon(Icons.person_2_outlined, color: AppColors.primary),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                ),
+              ),
+              const SizedBox(height: 12),
+
+              // Parent/Guardian Phone
               TextFormField(
                 controller: _phoneController,
                 keyboardType: TextInputType.phone,
                 decoration: InputDecoration(
-                  labelText: loc.translate('phone'),
+                  labelText: loc.translate('guardianPhone'),
                   prefixIcon: const Icon(Icons.phone_outlined, color: AppColors.primary),
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
                 ),
@@ -177,27 +245,7 @@ class _AddEditPatientDialogState extends State<AddEditPatientDialog> {
               ),
               const SizedBox(height: 12),
 
-              TextFormField(
-                controller: _emailController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  labelText: loc.translate('email'),
-                  prefixIcon: const Icon(Icons.email_outlined, color: AppColors.primary),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
-                ),
-              ),
-              const SizedBox(height: 12),
-
-              TextFormField(
-                controller: _bloodTypeController,
-                decoration: InputDecoration(
-                  labelText: 'Blood Type (O+, A-)',
-                  prefixIcon: const Icon(Icons.water_drop_outlined, color: AppColors.primary),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
-                ),
-              ),
-              const SizedBox(height: 12),
-
+              // Medical History / Diagnosis Notes
               TextFormField(
                 controller: _historyController,
                 maxLines: 2,
@@ -222,4 +270,5 @@ class _AddEditPatientDialogState extends State<AddEditPatientDialog> {
       ),
     );
   }
+
 }

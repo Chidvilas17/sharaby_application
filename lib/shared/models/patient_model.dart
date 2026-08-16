@@ -14,6 +14,15 @@ class PatientModel {
   final String allergies;
   final String emergencyContact;
 
+  // Child / Pediatric Specific Fields
+  final String fatherName;
+  final String motherName;
+  final String guardianPhone;
+  final String weight;
+  final String height;
+  final String growthStatus;
+  final String vaccinationStatus;
+
   const PatientModel({
     required this.id,
     required this.fullName,
@@ -27,6 +36,13 @@ class PatientModel {
     required this.medicalHistory,
     required this.allergies,
     required this.emergencyContact,
+    this.fatherName = '',
+    this.motherName = '',
+    this.guardianPhone = '',
+    this.weight = '15 kg',
+    this.height = '98 cm',
+    this.growthStatus = 'Normal Development',
+    this.vaccinationStatus = 'Up to Date',
   });
 
   PatientModel copyWith({
@@ -42,6 +58,13 @@ class PatientModel {
     String? medicalHistory,
     String? allergies,
     String? emergencyContact,
+    String? fatherName,
+    String? motherName,
+    String? guardianPhone,
+    String? weight,
+    String? height,
+    String? growthStatus,
+    String? vaccinationStatus,
   }) {
     return PatientModel(
       id: id ?? this.id,
@@ -56,6 +79,14 @@ class PatientModel {
       medicalHistory: medicalHistory ?? this.medicalHistory,
       allergies: allergies ?? this.allergies,
       emergencyContact: emergencyContact ?? this.emergencyContact,
+      fatherName: fatherName ?? this.fatherName,
+      motherName: motherName ?? this.motherName,
+      guardianPhone: guardianPhone ?? this.guardianPhone,
+      weight: weight ?? this.weight,
+      height: height ?? this.height,
+      growthStatus: growthStatus ?? this.growthStatus,
+      vaccinationStatus: vaccinationStatus ?? this.vaccinationStatus,
     );
   }
 }
+

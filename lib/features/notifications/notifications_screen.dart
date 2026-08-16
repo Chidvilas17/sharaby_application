@@ -19,17 +19,17 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   final List<Map<String, dynamic>> _notifications = [
     {
       'id': '1',
-      'title': 'New Patient Added',
-      'message': 'Mohamed Ali was registered as a new patient by Reception.',
+      'title': 'New Pediatric Patient Registered',
+      'message': 'Adam Mohamed (4 yrs) was registered by Reception.',
       'time': '5 mins ago',
-      'icon': Icons.person_add_alt_1_rounded,
+      'icon': Icons.child_care_rounded,
       'color': AppColors.primaryDark,
       'isRead': false,
     },
     {
       'id': '2',
-      'title': 'Prescription Created',
-      'message': 'Dr. Ahmed Sharaby generated a new Rx for Sarah Mansour.',
+      'title': 'Pediatric Prescription Issued',
+      'message': 'Dr. Ahmed Sharaby issued a new Rx for Lina Ahmed (Pediatric Asthma).',
       'time': '30 mins ago',
       'icon': Icons.description_rounded,
       'color': AppColors.accent,
@@ -37,17 +37,17 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     },
     {
       'id': '3',
-      'title': 'Appointment Scheduled',
-      'message': 'Dental checkup appointment confirmed for tomorrow at 10:30 AM.',
+      'title': 'Vaccination Due Reminder',
+      'message': 'MMR booster vaccination scheduled for Youssef Ali tomorrow at 10:30 AM.',
       'time': '1 hour ago',
-      'icon': Icons.calendar_month_rounded,
+      'icon': Icons.vaccines_rounded,
       'color': AppColors.info,
       'isRead': false,
     },
     {
       'id': '4',
-      'title': 'Billing Invoice Generated',
-      'message': 'Invoice #INV-2026-089 (EGP 1,200) generated successfully.',
+      'title': 'Pediatric Visit Invoice Generated',
+      'message': 'Invoice #INV-2026-089 (EGP 450) generated for Consultation.',
       'time': '3 hours ago',
       'icon': Icons.receipt_long_rounded,
       'color': AppColors.success,
@@ -55,14 +55,15 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     },
     {
       'id': '5',
-      'title': 'Patient Profile Updated',
-      'message': 'Khaled Mahmoud updated contact phone number and address.',
+      'title': 'Child Growth Record Updated',
+      'message': 'Nour Hassan\'s weight (8.5 kg) and height (71 cm) updated.',
       'time': 'Yesterday',
-      'icon': Icons.edit_note_rounded,
+      'icon': Icons.show_chart_rounded,
       'color': AppColors.warning,
       'isRead': true,
     },
   ];
+
 
   void _markAllAsRead() {
     final loc = AppLocalizations.of(context);

@@ -168,9 +168,9 @@ class _PatientDetailScreenState extends State<PatientDetailScreen>
                 unselectedLabelColor: isDark ? AppColors.textMutedDark : AppColors.textMutedLight,
                 indicatorColor: AppColors.primaryDark,
                 tabs: [
+                  Tab(text: loc.translate('growth')),
                   Tab(text: loc.translate('medicalHistory')),
-                  Tab(text: loc.translate('phone')),
-                  Tab(text: loc.translate('todaysActivity')),
+                  Tab(text: loc.translate('parentGuardian')),
                 ],
               ),
 
@@ -179,7 +179,76 @@ class _PatientDetailScreenState extends State<PatientDetailScreen>
                 child: TabBarView(
                   controller: _tabController,
                   children: [
-                    // Medical Info Tab
+                    // Growth & Vitals Tab
+                    ListView(
+                      padding: const EdgeInsets.all(20),
+                      children: [
+                        MedicalCard(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                loc.translate('growthStatus'),
+                                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: AppColors.primaryDark),
+                              ),
+                              const SizedBox(height: 14),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  _buildGrowthMetricTile(loc.translate('weight'), _patient.weight, Icons.monitor_weight_rounded, AppColors.primaryDark),
+                                  _buildGrowthMetricTile(loc.translate('height'), _patient.height, Icons.height_rounded, AppColors.accent),
+                                  _buildGrowthMetricTile(loc.translate('vaccinationStatus'), _patient.vaccinationStatus, Icons.vaccines_rounded, AppColors.success),
+                                ],
+                              ),
+                              const SizedBox(height: 14),
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primary.withValues(alpha: 0.1),
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.child_care_rounded, color: AppColors.primaryDark),
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                      child: Text(
+                                        'Growth Percentile: ${_patient.growthStatus}',
+                                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 14),
+                        MedicalCard(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Pediatric Vital Signs',
+                                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(height: 12),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  _buildVitalColumn('Heart Rate', '95 bpm', AppColors.error),
+                                  _buildVitalColumn('Body Temp', '37.1 °C', AppColors.warning),
+                                  _buildVitalColumn('SpO2', '99%', AppColors.success),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    // Medical & History Tab
                     ListView(
                       padding: const EdgeInsets.all(20),
                       children: [
@@ -202,7 +271,7 @@ class _PatientDetailScreenState extends State<PatientDetailScreen>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text(
-                                'Known Allergies',
+                                'Known Pediatric Allergies',
                                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.error),
                               ),
                               const SizedBox(height: 8),
@@ -210,26 +279,48 @@ class _PatientDetailScreenState extends State<PatientDetailScreen>
                             ],
                           ),
                         ),
+                        const SizedBox(height: 14),
+                        MedicalCard(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Vaccination Record',
+                                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.success),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(_patient.vaccinationStatus),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
 
-                    // Contact Tab
+                    // Parent / Guardian Tab
                     ListView(
                       padding: const EdgeInsets.all(20),
                       children: [
                         MedicalCard(
                           child: ListTile(
-                            leading: const Icon(Icons.phone_rounded, color: AppColors.primaryDark),
-                            title: Text(loc.translate('phone')),
-                            subtitle: Text(_patient.phone),
+                            leading: const Icon(Icons.person_rounded, color: AppColors.primaryDark),
+                            title: Text(loc.translate('fatherName')),
+                            subtitle: Text(_patient.fatherName.isNotEmpty ? _patient.fatherName : _patient.emergencyContact),
                           ),
                         ),
                         const SizedBox(height: 12),
                         MedicalCard(
                           child: ListTile(
-                            leading: const Icon(Icons.email_rounded, color: AppColors.accent),
-                            title: Text(loc.translate('email')),
-                            subtitle: Text(_patient.email),
+                            leading: const Icon(Icons.person_outline_rounded, color: AppColors.accent),
+                            title: Text(loc.translate('motherName')),
+                            subtitle: Text(_patient.motherName.isNotEmpty ? _patient.motherName : 'Registered Mother / Guardian'),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        MedicalCard(
+                          child: ListTile(
+                            leading: const Icon(Icons.phone_rounded, color: AppColors.success),
+                            title: Text(loc.translate('guardianPhone')),
+                            subtitle: Text(_patient.phone),
                           ),
                         ),
                         const SizedBox(height: 12),
@@ -238,33 +329,6 @@ class _PatientDetailScreenState extends State<PatientDetailScreen>
                             leading: const Icon(Icons.contact_phone_rounded, color: AppColors.warning),
                             title: const Text('Emergency Contact'),
                             subtitle: Text(_patient.emergencyContact),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    // Vitals & History Tab
-                    ListView(
-                      padding: const EdgeInsets.all(20),
-                      children: [
-                        const MedicalCard(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Recent Vitals Reading',
-                                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(height: 12),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: [
-                                  Column(children: [Text('BP', style: TextStyle(color: Colors.grey)), Text('120/80', style: TextStyle(fontWeight: FontWeight.bold))]),
-                                  Column(children: [Text('Pulse', style: TextStyle(color: Colors.grey)), Text('72 bpm', style: TextStyle(fontWeight: FontWeight.bold))]),
-                                  Column(children: [Text('Temp', style: TextStyle(color: Colors.grey)), Text('98.6 °F', style: TextStyle(fontWeight: FontWeight.bold))]),
-                                ],
-                              ),
-                            ],
                           ),
                         ),
                       ],
@@ -278,4 +342,40 @@ class _PatientDetailScreenState extends State<PatientDetailScreen>
       ),
     );
   }
+
+  Widget _buildGrowthMetricTile(String label, String value, IconData icon, Color color) {
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.12),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon, color: color, size: 22),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          label,
+          style: const TextStyle(fontSize: 11, color: AppColors.textMutedLight),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          value,
+          style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.bold),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildVitalColumn(String label, String val, Color color) {
+    return Column(
+      children: [
+        Text(label, style: const TextStyle(fontSize: 11.5, color: Colors.grey)),
+        const SizedBox(height: 4),
+        Text(val, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: color)),
+      ],
+    );
+  }
 }
+

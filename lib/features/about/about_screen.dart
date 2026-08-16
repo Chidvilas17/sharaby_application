@@ -126,10 +126,11 @@ class AboutScreen extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.all(16),
                         child: Text(
-                          'Sharaby Center Clinic System enforces end-to-end data encryption for patient health records in accordance with medical data privacy guidelines.',
+                          'Sharaby Center Pediatric Clinic System enforces end-to-end data encryption for pediatric health records in accordance with medical data privacy guidelines.',
                           style: TextStyle(fontSize: 13),
                         ),
                       ),
+
                     ],
                   ),
                 ),

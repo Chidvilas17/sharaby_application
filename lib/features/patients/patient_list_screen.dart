@@ -52,9 +52,12 @@ class _PatientListScreenState extends State<PatientListScreen> {
     setState(() {
       _filteredPatients = _allPatients.where((p) {
         final matchesQuery = p.fullName.toLowerCase().contains(query) ||
+            p.fatherName.toLowerCase().contains(query) ||
+            p.motherName.toLowerCase().contains(query) ||
             p.phone.contains(query) ||
             p.id.toLowerCase().contains(query) ||
             p.medicalHistory.toLowerCase().contains(query);
+
 
         bool matchesFilter = true;
         if (_selectedFilter == 'Active') {
