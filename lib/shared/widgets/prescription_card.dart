@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_decorations.dart';
 import '../../core/utils/formatters.dart';
 import '../models/prescription_model.dart';
-import 'medical_card.dart';
+import 'glass_card.dart';
 
 /// Prescription preview card widget
 class PrescriptionCard extends StatelessWidget {
@@ -19,8 +20,11 @@ class PrescriptionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return MedicalCard(
+    return GlassCard(
       onTap: onTap,
+      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: 12),
+      borderRadius: 22,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -28,15 +32,16 @@ class PrescriptionCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.accent.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(8),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                decoration: AppDecorations.glossyPillBoxDecoration(
+                  color: AppColors.accent,
+                  isDark: isDark,
+                  borderRadius: 12,
                 ),
                 child: Text(
                   prescription.id,
                   style: const TextStyle(
-                    fontSize: 12,
+                    fontSize: 11.5,
                     fontWeight: FontWeight.bold,
                     color: AppColors.accent,
                   ),
@@ -57,7 +62,7 @@ class PrescriptionCard extends StatelessWidget {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+              color: isDark ? AppColors.textPrimaryDark : AppColors.primaryDark,
             ),
           ),
           const SizedBox(height: 4),
@@ -76,16 +81,19 @@ class PrescriptionCard extends StatelessWidget {
             spacing: 6,
             runSpacing: 6,
             children: prescription.medicines.map((m) {
-              return Chip(
-                padding: EdgeInsets.zero,
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                backgroundColor: AppColors.primary.withValues(alpha: 0.08),
-                label: Text(
+              return Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: AppDecorations.glossyPillBoxDecoration(
+                  color: AppColors.primaryDark,
+                  isDark: isDark,
+                  borderRadius: 10,
+                ),
+                child: Text(
                   m.medicineName,
                   style: const TextStyle(
                     fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.primary,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primaryDark,
                   ),
                 ),
               );
@@ -96,3 +104,4 @@ class PrescriptionCard extends StatelessWidget {
     );
   }
 }
+

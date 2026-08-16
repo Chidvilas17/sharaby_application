@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_enums.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_decorations.dart';
 import '../models/patient_model.dart';
 import 'glass_card.dart';
+
 
 /// Patient Card with avatar badge, status tags, and glass finish
 class PatientCard extends StatelessWidget {
@@ -40,25 +42,26 @@ class PatientCard extends StatelessWidget {
       onTap: onTap,
       padding: const EdgeInsets.all(16),
       margin: const EdgeInsets.only(bottom: 12),
-      borderRadius: 20,
+      borderRadius: 22,
       child: Row(
         children: [
-          // Avatar with glowing ring
+          // Avatar with 3D glowing ring
           Container(
-            padding: const EdgeInsets.all(2),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: AppColors.accentGradient,
+            padding: const EdgeInsets.all(2.5),
+            decoration: AppDecorations.glossyIconBoxDecoration(
+              color: AppColors.primaryDark,
+              isDark: isDark,
+              isCircle: true,
             ),
             child: CircleAvatar(
-              radius: 25,
+              radius: 24,
               backgroundColor: isDark ? AppColors.cardDark : Colors.white,
               child: Text(
                 patient.fullName.characters.first,
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
+                  color: AppColors.primaryDark,
                 ),
               ),
             ),
@@ -87,10 +90,11 @@ class PatientCard extends StatelessWidget {
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 3),
-                      decoration: BoxDecoration(
-                        color: statusColor.withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(10),
+                          horizontal: 9, vertical: 4),
+                      decoration: AppDecorations.glossyPillBoxDecoration(
+                        color: statusColor,
+                        isDark: isDark,
+                        borderRadius: 12,
                       ),
                       child: Text(
                         statusLabel,
@@ -119,7 +123,7 @@ class PatientCard extends StatelessWidget {
                     const Icon(
                       Icons.history_rounded,
                       size: 13,
-                      color: AppColors.primary,
+                      color: AppColors.primaryDark,
                     ),
                     const SizedBox(width: 4),
                     Text(
@@ -138,19 +142,21 @@ class PatientCard extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           Container(
-            padding: const EdgeInsets.all(6),
-            decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.1),
-              shape: BoxShape.circle,
+            padding: const EdgeInsets.all(7),
+            decoration: AppDecorations.glossyIconBoxDecoration(
+              color: AppColors.primaryDark,
+              isDark: isDark,
+              isCircle: true,
             ),
             child: const Icon(
               Icons.chevron_right_rounded,
-              color: AppColors.primary,
-              size: 20,
+              color: AppColors.primaryDark,
+              size: 18,
             ),
           ),
         ],
       ),
     );
+
   }
 }

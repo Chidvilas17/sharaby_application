@@ -50,25 +50,34 @@ class _GradientButtonState extends State<GradientButton> {
           borderRadius: BorderRadius.circular(widget.borderRadius),
           border: isEnabled
               ? Border.all(
-                  color: Colors.white.withValues(alpha: 0.35),
-                  width: 1.2,
+                  color: Colors.white.withValues(alpha: 0.6),
+                  width: 1.5,
                 )
               : null,
           boxShadow: isEnabled
               ? [
                   BoxShadow(
-                    color: AppColors.primary.withValues(alpha: 0.4),
-                    blurRadius: 18,
-                    offset: const Offset(0, 6),
+                    color: Colors.white.withValues(alpha: 0.45),
+                    blurRadius: 8,
+                    spreadRadius: -2,
+                    offset: const Offset(0, -2),
+                  ),
+                  BoxShadow(
+                    color: AppColors.primaryDark.withValues(alpha: 0.35),
+                    blurRadius: 20,
+                    spreadRadius: 0,
+                    offset: const Offset(0, 8),
                   ),
                   const BoxShadow(
                     color: AppColors.glowBlue,
-                    blurRadius: 10,
-                    offset: Offset(0, 2),
+                    blurRadius: 12,
+                    spreadRadius: -2,
+                    offset: Offset(0, 3),
                   )
                 ]
               : [],
         ),
+
         child: Material(
           color: Colors.transparent,
           child: InkWell(

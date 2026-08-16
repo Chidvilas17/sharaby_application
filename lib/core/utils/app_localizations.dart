@@ -201,8 +201,18 @@ class AppLocalizations {
       'confirmSignOutDesc': 'Are you sure you want to sign out of Sharaby Center?',
       'confirm': 'Confirm',
       'close': 'Close',
+      // Doctor AI Help
+      'doctorAiHelpTitle': 'Doctor AI Help',
+      'doctorAiHelpSubtitle': 'Select a pediatric question to quickly view helpful clinical guidance.',
+      'searchAiHelpPlaceholder': 'Search pediatric questions, symptoms...',
+      'allCategories': 'All Topics',
+      'clinicalDisclaimerTitle': 'Clinical Guidance Note',
+      'clinicalDisclaimerDesc': 'These are predefined guidance notes. Use clinical judgment and follow approved pediatric protocols.',
+      'backToQuestions': 'Back to Questions',
+      'noMatchingQuestions': 'No matching pediatric questions found.',
     },
     'ar': {
+
       'appName': 'مركز شرابي للأطفال',
       'appSubtitle': 'رعاية الأطفال وتتبع النمو والمتابعة الدورية',
       // Onboarding
@@ -392,8 +402,18 @@ class AppLocalizations {
       'confirmSignOutDesc': 'هل أنت تأكد من رغبتك في تسجيل الخروج من مركز شرابي للأطفال؟',
       'confirm': 'تأكيد',
       'close': 'إغلاق',
+      // Doctor AI Help
+      'doctorAiHelpTitle': 'مساعدة الطبيب الذكية',
+      'doctorAiHelpSubtitle': 'اختر سؤالاً لعرض إرشادات مفيدة في طب الأطفال ومتابعة الحالات.',
+      'searchAiHelpPlaceholder': 'البحث في الأسئلة، الأعراض، التطعيمات...',
+      'allCategories': 'جميع المواضيع',
+      'clinicalDisclaimerTitle': 'ملاحظة إرشادية طبية',
+      'clinicalDisclaimerDesc': 'هذه إرشادات بروتوكولية مسبقة. يرجى استخدام التقدير الطبي واتباع بروتوكولات العيادة المعتمدة.',
+      'backToQuestions': 'العودة للأسئلة',
+      'noMatchingQuestions': 'لم يتم العثور على أسئلة مطابقة.',
     },
   };
+
 
   String translate(String key) {
     return _localizedValues[locale.languageCode]?[key] ??

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_decorations.dart';
 import 'glass_card.dart';
 
 /// Reusable Notification Card for Notifications Screen
@@ -31,25 +32,17 @@ class NotificationCard extends StatelessWidget {
       onTap: onTap,
       padding: const EdgeInsets.all(16),
       margin: const EdgeInsets.only(bottom: 12),
-      borderRadius: 18,
-      customColor: isRead
-          ? null
-          : (isDark
-              ? AppColors.primary.withValues(alpha: 0.12)
-              : AppColors.primaryLight.withValues(alpha: 0.35)),
+      borderRadius: 22,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Icon Box
           Container(
             padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: iconColor.withValues(alpha: 0.15),
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: iconColor.withValues(alpha: 0.3),
-                width: 1.5,
-              ),
+            decoration: AppDecorations.glossyIconBoxDecoration(
+              color: iconColor,
+              isDark: isDark,
+              borderRadius: 14,
             ),
             child: Icon(icon, color: iconColor, size: 22),
           ),
@@ -71,16 +64,16 @@ class NotificationCard extends StatelessWidget {
                               isRead ? FontWeight.w600 : FontWeight.bold,
                           color: isDark
                               ? AppColors.textPrimaryDark
-                              : AppColors.textPrimaryLight,
+                              : AppColors.primaryDark,
                         ),
                       ),
                     ),
                     if (!isRead)
                       Container(
-                        width: 8,
-                        height: 8,
+                        width: 9,
+                        height: 9,
                         decoration: const BoxDecoration(
-                          color: AppColors.primary,
+                          color: AppColors.primaryDark,
                           shape: BoxShape.circle,
                         ),
                       ),
@@ -124,3 +117,4 @@ class NotificationCard extends StatelessWidget {
     );
   }
 }
+

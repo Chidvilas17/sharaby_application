@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_decorations.dart';
 import '../../features/navigation/main_navigation_shell.dart';
 
 /// Glassmorphism Rounded Back Button with Blue Glow and Smooth Animation
@@ -57,7 +58,6 @@ class _ModernBackButtonState extends State<ModernBackButton>
           MainNavigationShell.of(context)?.returnToDashboard();
         }
       },
-
       onTapCancel: () => _controller.reverse(),
       child: ScaleTransition(
         scale: _scaleAnimation,
@@ -65,28 +65,10 @@ class _ModernBackButtonState extends State<ModernBackButton>
           width: 42,
           height: 42,
           margin: const EdgeInsets.all(6),
-          decoration: BoxDecoration(
-            color: isDark
-                ? AppColors.glassSurfaceDark
-                : AppColors.glassSurfaceLight,
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: AppColors.primary.withValues(alpha: 0.4),
-              width: 1.5,
-            ),
-            boxShadow: const [
-              BoxShadow(
-                color: AppColors.glowBlue,
-                blurRadius: 12,
-                spreadRadius: -1,
-                offset: Offset(0, 2),
-              ),
-              BoxShadow(
-                color: AppColors.shadowBlue,
-                blurRadius: 10,
-                offset: Offset(0, 4),
-              ),
-            ],
+          decoration: AppDecorations.glossyIconBoxDecoration(
+            color: AppColors.primaryDark,
+            isDark: isDark,
+            isCircle: true,
           ),
           child: Center(
             child: Icon(
@@ -101,3 +83,4 @@ class _ModernBackButtonState extends State<ModernBackButton>
     );
   }
 }
+

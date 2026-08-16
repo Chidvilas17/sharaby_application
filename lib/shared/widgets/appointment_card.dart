@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_enums.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_decorations.dart';
 import '../models/appointment_model.dart';
-import 'medical_card.dart';
+import 'glass_card.dart';
 
 /// Appointment card displaying patient, time, reason, doctor, and status badge
 class AppointmentCard extends StatelessWidget {
@@ -37,7 +38,7 @@ class AppointmentCard extends StatelessWidget {
         statusLabel = 'Pending';
         break;
       case AppointmentStatus.completed:
-        statusColor = AppColors.primary;
+        statusColor = AppColors.primaryDark;
         statusLabel = 'Completed';
         break;
       case AppointmentStatus.cancelled:
@@ -46,8 +47,11 @@ class AppointmentCard extends StatelessWidget {
         break;
     }
 
-    return MedicalCard(
+    return GlassCard(
       onTap: onTap,
+      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: 12),
+      borderRadius: 22,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -57,22 +61,23 @@ class AppointmentCard extends StatelessWidget {
               Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(10),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    decoration: AppDecorations.glossyPillBoxDecoration(
+                      color: AppColors.primaryDark,
+                      isDark: isDark,
+                      borderRadius: 12,
                     ),
                     child: Row(
                       children: [
                         const Icon(Icons.access_time_filled_rounded,
-                            size: 14, color: AppColors.primary),
+                            size: 14, color: AppColors.primaryDark),
                         const SizedBox(width: 6),
                         Text(
                           appointment.timeSlot,
                           style: const TextStyle(
-                            fontSize: 13,
+                            fontSize: 12.5,
                             fontWeight: FontWeight.bold,
-                            color: AppColors.primary,
+                            color: AppColors.primaryDark,
                           ),
                         ),
                       ],
@@ -84,14 +89,15 @@ class AppointmentCard extends StatelessWidget {
                 onTap: onStatusTap,
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  decoration: BoxDecoration(
-                    color: statusColor.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(10),
+                  decoration: AppDecorations.glossyPillBoxDecoration(
+                    color: statusColor,
+                    isDark: isDark,
+                    borderRadius: 12,
                   ),
                   child: Text(
                     statusLabel,
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 11.5,
                       fontWeight: FontWeight.bold,
                       color: statusColor,
                     ),
@@ -106,7 +112,7 @@ class AppointmentCard extends StatelessWidget {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+              color: isDark ? AppColors.textPrimaryDark : AppColors.primaryDark,
             ),
           ),
           const SizedBox(height: 4),
@@ -131,7 +137,7 @@ class AppointmentCard extends StatelessWidget {
               Row(
                 children: [
                   const Icon(Icons.medical_services_outlined,
-                      size: 14, color: AppColors.secondary),
+                      size: 14, color: AppColors.primaryDark),
                   const SizedBox(width: 6),
                   Text(
                     appointment.doctorName,
@@ -147,7 +153,7 @@ class AppointmentCard extends StatelessWidget {
                 appointment.department,
                 style: const TextStyle(
                   fontSize: 12,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.bold,
                   color: AppColors.accent,
                 ),
               ),
@@ -158,3 +164,4 @@ class AppointmentCard extends StatelessWidget {
     );
   }
 }
+

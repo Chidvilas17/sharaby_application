@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_enums.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_decorations.dart';
 import '../../core/utils/formatters.dart';
 import '../models/invoice_model.dart';
-import 'medical_card.dart';
+import 'glass_card.dart';
 import 'protected_financial_text.dart';
 
 /// Invoice summary card for billing module with financial security protection
@@ -42,8 +43,11 @@ class InvoiceCard extends StatelessWidget {
         break;
     }
 
-    return MedicalCard(
+    return GlassCard(
       onTap: onTap,
+      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: 12),
+      borderRadius: 22,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -55,14 +59,15 @@ class InvoiceCard extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
+                  color: AppColors.primaryDark,
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: statusColor.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(8),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                decoration: AppDecorations.glossyPillBoxDecoration(
+                  color: statusColor,
+                  isDark: isDark,
+                  borderRadius: 12,
                 ),
                 child: Text(
                   statusLabel,
@@ -92,7 +97,7 @@ class InvoiceCard extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         color: isDark
                             ? AppColors.textPrimaryDark
-                            : AppColors.textPrimaryLight,
+                            : AppColors.primaryDark,
                       ),
                     ),
                     const SizedBox(height: 2),
@@ -126,3 +131,4 @@ class InvoiceCard extends StatelessWidget {
     );
   }
 }
+

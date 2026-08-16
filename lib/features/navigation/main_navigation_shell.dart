@@ -5,6 +5,7 @@ import '../about/about_screen.dart';
 import '../appointments/appointments_screen.dart';
 import '../billing/billing_screen.dart';
 import '../dashboard/dashboard_screen.dart';
+import '../doctor_help/widgets/doctor_help_floating_button.dart';
 import '../documents/documents_screen.dart';
 import '../notifications/notifications_screen.dart';
 import '../patients/patient_list_screen.dart';
@@ -85,6 +86,7 @@ class MainNavigationShellState extends State<MainNavigationShell> {
           index: _currentIndex,
           children: _pages,
         ),
+        floatingActionButton: const DoctorHelpFloatingButton(),
         bottomNavigationBar: showBottomNav
             ? BottomNavBar(
                 selectedIndex: _currentIndex,
@@ -95,4 +97,5 @@ class MainNavigationShellState extends State<MainNavigationShell> {
     );
   }
 }
+
 

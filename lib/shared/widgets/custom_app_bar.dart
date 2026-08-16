@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_decorations.dart';
 import '../../features/navigation/main_navigation_shell.dart';
 import 'modern_back_button.dart';
 
@@ -40,7 +41,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         leadingWidget = _DrawerMenuButton(isDark: isDark);
       }
     }
-
 
     return AppBar(
       elevation: 0,
@@ -111,27 +111,10 @@ class _DrawerMenuButtonState extends State<_DrawerMenuButton>
           width: 42,
           height: 42,
           margin: const EdgeInsets.all(6),
-          decoration: BoxDecoration(
-            color: widget.isDark
-                ? AppColors.glassSurfaceDark
-                : AppColors.glassSurfaceLight,
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: AppColors.primary.withValues(alpha: 0.35),
-              width: 1.5,
-            ),
-            boxShadow: const [
-              BoxShadow(
-                color: AppColors.glowBlue,
-                blurRadius: 10,
-                spreadRadius: -1,
-              ),
-              BoxShadow(
-                color: AppColors.shadowBlue,
-                blurRadius: 8,
-                offset: Offset(0, 3),
-              ),
-            ],
+          decoration: AppDecorations.glossyIconBoxDecoration(
+            color: AppColors.primaryDark,
+            isDark: widget.isDark,
+            isCircle: true,
           ),
           child: Icon(
             Icons.menu_rounded,
@@ -143,3 +126,4 @@ class _DrawerMenuButtonState extends State<_DrawerMenuButton>
     );
   }
 }
+
