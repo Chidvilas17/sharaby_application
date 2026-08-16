@@ -4,8 +4,8 @@ import '../../shared/widgets/custom_drawer.dart';
 import '../about/about_screen.dart';
 import '../appointments/appointments_screen.dart';
 import '../billing/billing_screen.dart';
+import '../assistant/collapsible_assistant_fab.dart';
 import '../dashboard/dashboard_screen.dart';
-import '../doctor_help/widgets/doctor_help_floating_button.dart';
 import '../documents/documents_screen.dart';
 import '../notifications/notifications_screen.dart';
 import '../patients/patient_list_screen.dart';
@@ -86,7 +86,7 @@ class MainNavigationShellState extends State<MainNavigationShell> {
           index: _currentIndex,
           children: _pages,
         ),
-        floatingActionButton: const DoctorHelpFloatingButton(),
+        floatingActionButton: const CollapsibleAssistantFab(),
         bottomNavigationBar: showBottomNav
             ? BottomNavBar(
                 selectedIndex: _currentIndex,

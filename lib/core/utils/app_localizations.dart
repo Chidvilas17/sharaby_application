@@ -201,17 +201,25 @@ class AppLocalizations {
       'confirmSignOutDesc': 'Are you sure you want to sign out of Sharaby Center?',
       'confirm': 'Confirm',
       'close': 'Close',
-      // Doctor AI Help
-      'doctorAiHelpTitle': 'Doctor AI Help',
-      'doctorAiHelpSubtitle': 'Select a pediatric question to quickly view helpful clinical guidance.',
-      'searchAiHelpPlaceholder': 'Search pediatric questions, symptoms...',
-      'allCategories': 'All Topics',
-      'clinicalDisclaimerTitle': 'Clinical Guidance Note',
-      'clinicalDisclaimerDesc': 'These are predefined guidance notes. Use clinical judgment and follow approved pediatric protocols.',
-      'backToQuestions': 'Back to Questions',
-      'noMatchingQuestions': 'No matching pediatric questions found.',
+      // Assistant FAB & 4-Option Menu
+      'assistantFabHelp': 'Help',
+      'aiMedicalHelpTitle': 'AI Medical Help',
+      'aiMedicalHelpSub': 'Pediatric clinical protocols & Q&A',
+      'appHelpTitle': 'App Help',
+      'appHelpSub': 'How to use clinic features & forms',
+      'doctorToolsTitle': 'Doctor Tools',
+      'doctorToolsSub': 'Clinical tools & calculators',
+      'doctorAssistantTitle': 'Doctor Assistant',
+      'doctorAssistantSub': 'Daily workspace & summaries',
+      'comingSoonTag': 'Coming Soon',
+      'comingSoonDesc': 'This feature is under active development and will be available in the next clinic update.',
+      // App Help
+      'appHelpHeaderTitle': 'App Usage Help',
+      'appHelpHeaderSubtitle': 'Select a guide or search to learn how to use Sharaby Center features.',
+      'searchAppHelpPlaceholder': 'Search app guides (e.g., add patient, Rx)...',
     },
     'ar': {
+
 
       'appName': 'مركز شرابي للأطفال',
       'appSubtitle': 'رعاية الأطفال وتتبع النمو والمتابعة الدورية',
@@ -402,17 +410,25 @@ class AppLocalizations {
       'confirmSignOutDesc': 'هل أنت تأكد من رغبتك في تسجيل الخروج من مركز شرابي للأطفال؟',
       'confirm': 'تأكيد',
       'close': 'إغلاق',
-      // Doctor AI Help
-      'doctorAiHelpTitle': 'مساعدة الطبيب الذكية',
-      'doctorAiHelpSubtitle': 'اختر سؤالاً لعرض إرشادات مفيدة في طب الأطفال ومتابعة الحالات.',
-      'searchAiHelpPlaceholder': 'البحث في الأسئلة، الأعراض، التطعيمات...',
-      'allCategories': 'جميع المواضيع',
-      'clinicalDisclaimerTitle': 'ملاحظة إرشادية طبية',
-      'clinicalDisclaimerDesc': 'هذه إرشادات بروتوكولية مسبقة. يرجى استخدام التقدير الطبي واتباع بروتوكولات العيادة المعتمدة.',
-      'backToQuestions': 'العودة للأسئلة',
-      'noMatchingQuestions': 'لم يتم العثور على أسئلة مطابقة.',
+      // Assistant FAB & 4-Option Menu
+      'assistantFabHelp': 'المساعدة',
+      'aiMedicalHelpTitle': 'المساعدة الطبية الذكية',
+      'aiMedicalHelpSub': 'إرشادات وبروتوكولات طب الأطفال',
+      'appHelpTitle': 'مساعدة التطبيق',
+      'appHelpSub': 'دليل استخدام ميزات العيادة والنماذج',
+      'doctorToolsTitle': 'أدوات الطبيب',
+      'doctorToolsSub': 'الأدوات والحاسبات الطبية (قريباً)',
+      'doctorAssistantTitle': 'مساعد الطبيب',
+      'doctorAssistantSub': 'ملخصات وسير العمل اليومي (قريباً)',
+      'comingSoonTag': 'قريباً جداً',
+      'comingSoonDesc': 'هذه الميزة قيد التطوير وستكون متاحة في التحديث القادم للعيادة.',
+      // App Help
+      'appHelpHeaderTitle': 'دليل استخدام التطبيق',
+      'appHelpHeaderSubtitle': 'اختر دليلاً أو ابحث لمعرفة كيفية استخدام ميزات مركز شرابي للأطفال.',
+      'searchAppHelpPlaceholder': 'البحث في دليل الاستخدام (إضافة مريض، روشتة)...',
     },
   };
+
 
 
   String translate(String key) {
