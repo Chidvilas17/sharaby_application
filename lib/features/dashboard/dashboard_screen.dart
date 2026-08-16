@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_decorations.dart';
 import '../../core/theme/theme_provider.dart';
 import '../../core/utils/app_localizations.dart';
 import '../../shared/models/appointment_model.dart';
@@ -102,21 +103,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           IconButton(
                             icon: Container(
                               padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: isDark
-                                    ? AppColors.glassSurfaceDark
-                                    : Colors.white,
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: AppColors.glassBorderLight,
-                                  width: 1.2,
-                                ),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: AppColors.shadowBlue,
-                                    blurRadius: 10,
-                                  ),
-                                ],
+                              decoration: AppDecorations.glossyIconBoxDecoration(
+                                color: AppColors.primaryDark,
+                                isDark: isDark,
+                                isCircle: true,
                               ),
                               child: const Icon(
                                 Icons.menu_rounded,
@@ -158,15 +148,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           IconButton(
                             icon: Container(
                               padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: isDark
-                                    ? AppColors.glassSurfaceDark
-                                    : Colors.white,
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: AppColors.glassBorderLight,
-                                  width: 1.2,
-                                ),
+                              decoration: AppDecorations.glossyIconBoxDecoration(
+                                color: AppColors.primaryDark,
+                                isDark: isDark,
+                                isCircle: true,
                               ),
                               child: Icon(
                                 themeProvider.isDarkMode
@@ -199,15 +184,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               children: [
                                 Container(
                                   padding: const EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    color: isDark
-                                        ? AppColors.glassSurfaceDark
-                                        : Colors.white,
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: AppColors.glassBorderLight,
-                                      width: 1.2,
-                                    ),
+                                  decoration: AppDecorations.glossyIconBoxDecoration(
+                                    color: AppColors.primaryDark,
+                                    isDark: isDark,
+                                    isCircle: true,
                                   ),
                                   child: const Icon(
                                     Icons.notifications_none_rounded,
@@ -234,6 +214,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     ],
                   ),
+
                   const SizedBox(height: 20),
 
                   // Search Bar
@@ -374,25 +355,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     child: Column(
                       children: [
                         _buildActivityItem(
+                          context: context,
                           icon: Icons.check_circle_rounded,
                           color: AppColors.success,
-                          title: 'Dental Checkup Completed',
-                          subtitle: 'Patient Sarah Mansour • 09:30 AM',
+                          title: 'Pediatric Visit Completed',
+                          subtitle: 'Patient Adam Mohamed • 09:30 AM',
                         ),
                         const Divider(height: 16),
                         _buildActivityItem(
+                          context: context,
                           icon: Icons.access_time_filled_rounded,
                           color: AppColors.warning,
-                          title: 'Appointment In Progress',
-                          subtitle: 'Patient Mohamed Ali • 11:00 AM',
+                          title: 'Growth Check In Progress',
+                          subtitle: 'Patient Lina Ahmed • 11:00 AM',
                         ),
                         const Divider(height: 16),
                         _buildActivityItem(
+                          context: context,
                           icon: Icons.receipt_long_rounded,
                           color: AppColors.primaryDark,
-                          title: 'Payment Received (EGP 850)',
+                          title: 'Payment Received (EGP 450)',
                           subtitle: 'Invoice #INV-2026-042 • 11:45 AM',
                         ),
+
                       ],
                     ),
                   ),
@@ -473,30 +458,34 @@ class _DashboardScreenState extends State<DashboardScreen> {
     required Color color,
     required VoidCallback onTap,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Expanded(
       child: GlassCard(
         onTap: onTap,
-        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
-        borderRadius: 18,
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+        borderRadius: 20,
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.15),
-                shape: BoxShape.circle,
+              padding: const EdgeInsets.all(11),
+              decoration: AppDecorations.glossyIconBoxDecoration(
+                color: color,
+                isDark: isDark,
+                borderRadius: 16,
               ),
               child: Icon(icon, color: color, size: 22),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
             Text(
               label,
               textAlign: TextAlign.center,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 11.5,
+              style: TextStyle(
+                fontSize: 12,
                 fontWeight: FontWeight.bold,
+                color: isDark ? AppColors.textPrimaryDark : AppColors.primaryDark,
               ),
             ),
           ],
@@ -506,22 +495,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildActivityItem({
+    required BuildContext context,
     required IconData icon,
     required Color color,
     required String title,
     required String subtitle,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Row(
       children: [
         Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.12),
-            shape: BoxShape.circle,
+          padding: const EdgeInsets.all(9),
+          decoration: AppDecorations.glossyIconBoxDecoration(
+            color: color,
+            isDark: isDark,
+            borderRadius: 14,
           ),
           child: Icon(icon, color: color, size: 18),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 14),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -547,4 +540,5 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ],
     );
   }
+
 }

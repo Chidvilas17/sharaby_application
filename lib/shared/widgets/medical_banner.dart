@@ -19,23 +19,37 @@ class MedicalBanner extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        gradient: AppColors.heroGradient,
+        gradient: const LinearGradient(
+          colors: [
+            Color(0xFF0284C7),
+            Color(0xFF0369A1),
+            Color(0xFF38BDF8),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: Colors.white.withValues(alpha: 0.35),
+          color: Colors.white.withValues(alpha: 0.5),
           width: 1.5,
         ),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            color: AppColors.shadowBlue,
+            color: Colors.white.withValues(alpha: 0.4),
+            blurRadius: 10,
+            spreadRadius: -2,
+            offset: const Offset(0, -3),
+          ),
+          BoxShadow(
+            color: AppColors.primaryDark.withValues(alpha: 0.35),
             blurRadius: 24,
-            offset: Offset(0, 10),
+            offset: const Offset(0, 10),
           ),
           BoxShadow(
             color: AppColors.glowBlue,
             blurRadius: 16,
             spreadRadius: -2,
-            offset: Offset(0, 4),
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -52,7 +66,7 @@ class MedicalBanner extends StatelessWidget {
                 height: 160,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withValues(alpha: 0.15),
+                  color: Colors.white.withValues(alpha: 0.2),
                 ),
               ),
             ),
@@ -64,7 +78,7 @@ class MedicalBanner extends StatelessWidget {
                 height: 140,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.accent.withValues(alpha: 0.2),
+                  color: AppColors.accent.withValues(alpha: 0.3),
                 ),
               ),
             ),
@@ -80,11 +94,15 @@ class MedicalBanner extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 10,
-                            vertical: 4,
+                            vertical: 5,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.25),
+                            color: Colors.white.withValues(alpha: 0.28),
                             borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: Colors.white.withValues(alpha: 0.5),
+                              width: 1,
+                            ),
                           ),
                           child: const Row(
                             mainAxisSize: MainAxisSize.min,
@@ -147,14 +165,19 @@ class MedicalBanner extends StatelessWidget {
                       color: Colors.white,
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.8),
-                        width: 2,
+                        color: Colors.white.withValues(alpha: 0.9),
+                        width: 2.5,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.15),
-                          blurRadius: 14,
-                          offset: const Offset(0, 4),
+                          color: Colors.white.withValues(alpha: 0.6),
+                          blurRadius: 8,
+                          offset: const Offset(0, -2),
+                        ),
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.2),
+                          blurRadius: 16,
+                          offset: const Offset(0, 6),
                         ),
                       ],
                     ),
@@ -176,6 +199,7 @@ class MedicalBanner extends StatelessWidget {
       ),
     );
   }
+
 
   Widget _buildBadge(IconData icon, String label) {
     return Container(
