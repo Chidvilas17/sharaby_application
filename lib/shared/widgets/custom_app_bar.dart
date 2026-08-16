@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
+import '../../features/navigation/main_navigation_shell.dart';
 import 'modern_back_button.dart';
 
 /// Reusable Glassmorphism Custom Top AppBar.
-/// - On root screens (in IndexedStack): shows a hamburger menu button to open drawer.
-/// - On pushed sub-screens (Navigator.canPop == true): shows a modern back button.
+/// - On root Dashboard screen: shows a hamburger menu button to open drawer.
+/// - On secondary screens & pushed sub-screens: shows a modern back button.
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final List<Widget>? actions;
@@ -23,20 +24,23 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final canPop = Navigator.canPop(context);
+    final shell = MainNavigationShell.of(context);
+    final isSecondaryTab = shell != null && shell.currentIndex != 0;
 
     Widget? leadingWidget = leading;
 
     if (leadingWidget == null) {
-      final wantsBack = showBackButton ?? canPop;
+      final wantsBack = showBackButton ?? (canPop || isSecondaryTab);
 
-      if (wantsBack && canPop) {
-        // Sub-screen: show glassmorphism back button
+      if (wantsBack) {
+        // Sub-screen or secondary tab: show glassmorphism back button
         leadingWidget = const ModernBackButton();
       } else {
         // Root screen inside IndexedStack: show hamburger to open drawer
         leadingWidget = _DrawerMenuButton(isDark: isDark);
       }
     }
+
 
     return AppBar(
       elevation: 0,

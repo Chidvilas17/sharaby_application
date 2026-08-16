@@ -17,12 +17,18 @@ import '../settings/settings_screen.dart';
 class MainNavigationShell extends StatefulWidget {
   const MainNavigationShell({super.key});
 
+  static MainNavigationShellState? of(BuildContext context) {
+    return context.findAncestorStateOfType<MainNavigationShellState>();
+  }
+
   @override
-  State<MainNavigationShell> createState() => _MainNavigationShellState();
+  State<MainNavigationShell> createState() => MainNavigationShellState();
 }
 
-class _MainNavigationShellState extends State<MainNavigationShell> {
+class MainNavigationShellState extends State<MainNavigationShell> {
   int _currentIndex = 0;
+
+  int get currentIndex => _currentIndex;
 
   final List<Widget> _pages = const [
     DashboardScreen(),
@@ -38,10 +44,18 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
     AboutScreen(),
   ];
 
-  void _onTabSelected(int index) {
+  void selectTab(int index) {
     if (index >= 0 && index < _pages.length) {
       setState(() {
         _currentIndex = index;
+      });
+    }
+  }
+
+  void returnToDashboard() {
+    if (_currentIndex != 0) {
+      setState(() {
+        _currentIndex = 0;
       });
     }
   }
@@ -51,21 +65,34 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
     // Show Bottom Navigation Bar for primary 5 tabs (Dashboard, Patients, Appointments, Prescriptions, Billing)
     final bool showBottomNav = _currentIndex < 5;
 
-    return Scaffold(
-      drawer: CustomDrawer(
-        selectedIndex: _currentIndex,
-        onItemSelected: _onTabSelected,
+    return PopScope(
+      canPop: _currentIndex == 0 && !Navigator.canPop(context),
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          if (Navigator.canPop(context)) {
+            Navigator.pop(context);
+          } else if (_currentIndex != 0) {
+            returnToDashboard();
+          }
+        }
+      },
+      child: Scaffold(
+        drawer: CustomDrawer(
+          selectedIndex: _currentIndex,
+          onItemSelected: selectTab,
+        ),
+        body: IndexedStack(
+          index: _currentIndex,
+          children: _pages,
+        ),
+        bottomNavigationBar: showBottomNav
+            ? BottomNavBar(
+                selectedIndex: _currentIndex,
+                onTabSelected: selectTab,
+              )
+            : null,
       ),
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _pages,
-      ),
-      bottomNavigationBar: showBottomNav
-          ? BottomNavBar(
-              selectedIndex: _currentIndex,
-              onTabSelected: _onTabSelected,
-            )
-          : null,
     );
   }
 }
+

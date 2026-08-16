@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
+import '../../features/navigation/main_navigation_shell.dart';
 
 /// Glassmorphism Rounded Back Button with Blue Glow and Smooth Animation
 class ModernBackButton extends StatefulWidget {
@@ -52,8 +53,11 @@ class _ModernBackButtonState extends State<ModernBackButton>
           widget.onPressed!();
         } else if (Navigator.canPop(context)) {
           Navigator.pop(context);
+        } else {
+          MainNavigationShell.of(context)?.returnToDashboard();
         }
       },
+
       onTapCancel: () => _controller.reverse(),
       child: ScaleTransition(
         scale: _scaleAnimation,

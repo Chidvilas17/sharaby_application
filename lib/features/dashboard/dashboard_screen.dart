@@ -21,6 +21,7 @@ import '../../shared/widgets/patient_card.dart';
 import '../../shared/widgets/prescription_card.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/stat_card.dart';
+import '../navigation/main_navigation_shell.dart';
 import '../notifications/notifications_screen.dart';
 import '../patients/add_edit_patient_dialog.dart';
 import '../prescriptions/create_prescription_screen.dart';
@@ -298,12 +299,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         icon: Icons.analytics_rounded,
                         color: AppColors.success,
                         onTap: () {
-                          // Navigate to reports tab via Shell notification or dialog
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(loc.translate('navReports')),
-                            ),
-                          );
+                          MainNavigationShell.of(context)?.selectTab(5);
                         },
                       ),
                     ],
@@ -406,7 +402,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   SectionHeader(
                     title: loc.translate('recentPatients'),
                     actionText: loc.translate('viewAll'),
-                    onActionTap: () {},
+                    onActionTap: () {
+                      MainNavigationShell.of(context)?.selectTab(1);
+                    },
                   ),
                   const SizedBox(height: 12),
                   Column(
@@ -422,7 +420,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   SectionHeader(
                     title: loc.translate('recentPrescriptions'),
                     actionText: loc.translate('viewAll'),
-                    onActionTap: () {},
+                    onActionTap: () {
+                      MainNavigationShell.of(context)?.selectTab(3);
+                    },
                   ),
                   const SizedBox(height: 12),
                   Column(
@@ -441,8 +441,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   SectionHeader(
                     title: loc.translate('recentBilling'),
                     actionText: loc.translate('viewAll'),
-                    onActionTap: () {},
+                    onActionTap: () {
+                      MainNavigationShell.of(context)?.selectTab(4);
+                    },
                   ),
+
                   const SizedBox(height: 12),
                   Column(
                     children: _recentInvoices
