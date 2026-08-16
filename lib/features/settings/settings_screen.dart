@@ -11,6 +11,9 @@ import '../../shared/widgets/custom_app_bar.dart';
 import '../../shared/widgets/glass_card.dart';
 import '../../shared/widgets/settings_tile.dart';
 
+import '../call_identification/call_identification_service.dart';
+import '../call_identification/widgets/call_permission_dialog.dart';
+
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
@@ -20,6 +23,22 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   bool _notificationsEnabled = true;
+  bool _callIdentificationEnabled = true;
+  final CallIdentificationService _callService = CallIdentificationService();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCallSetting();
+  }
+
+  Future<void> _loadCallSetting() async {
+    final enabled = await _callService.isEnabled();
+    if (mounted) {
+      setState(() => _callIdentificationEnabled = enabled);
+    }
+  }
+
 
   void _showLanguageDialog() {
     final langProvider = LanguageInheritedWidget.of(context);
@@ -142,6 +161,41 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   },
                 ),
               ),
+
+              // Patient Call Identification Section
+              SettingsTile(
+                title: loc.translate('callIdentificationTitle'),
+                subtitle: loc.translate('callIdentificationSubtitle'),
+                icon: Icons.phone_callback_rounded,
+                iconColor: AppColors.primaryDark,
+                trailing: Switch(
+                  value: _callIdentificationEnabled,
+                  onChanged: (val) async {
+                    if (val) {
+                      final hasPerm = await _callService.hasPermission();
+                      if (!hasPerm) {
+                        if (!context.mounted) return;
+                        final granted = await showDialog<bool>(
+                          context: context,
+                          builder: (_) => const CallPermissionDialog(),
+                        );
+                        if (granted != true) {
+                          if (!context.mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(loc.translate('permissionDeniedWarning')),
+                            ),
+                          );
+                          return;
+                        }
+                      }
+                    }
+                    await _callService.setEnabled(val);
+                    setState(() => _callIdentificationEnabled = val);
+                  },
+                ),
+              ),
+
 
               // Privacy Policy
               SettingsTile(

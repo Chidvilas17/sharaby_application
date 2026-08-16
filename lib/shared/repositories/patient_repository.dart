@@ -4,6 +4,7 @@ import '../models/patient_model.dart';
 abstract class PatientRepository {
   Future<List<PatientModel>> getPatients();
   Future<PatientModel?> getPatientById(String id);
+  Future<PatientModel?> findPatientByPhoneNumber(String phoneNumber);
   Future<void> addPatient(PatientModel patient);
   Future<void> updatePatient(PatientModel patient);
   Future<void> deletePatient(String id);
@@ -151,8 +152,28 @@ class MockPatientRepository implements PatientRepository {
   }
 
   @override
+  Future<PatientModel?> findPatientByPhoneNumber(String phoneNumber) async {
+    final patients = await getPatients();
+    final cleanTarget = phoneNumber.replaceAll(RegExp(r'\D'), '');
+
+    for (final p in patients) {
+      final cleanP = p.phone.replaceAll(RegExp(r'\D'), '');
+      final cleanG = p.guardianPhone.replaceAll(RegExp(r'\D'), '');
+      final cleanE = p.emergencyContact.replaceAll(RegExp(r'\D'), '');
+
+      if ((cleanP.isNotEmpty && cleanP.endsWith(cleanTarget.length >= 8 ? cleanTarget.substring(cleanTarget.length - 8) : cleanTarget)) ||
+          (cleanG.isNotEmpty && cleanG.endsWith(cleanTarget.length >= 8 ? cleanTarget.substring(cleanTarget.length - 8) : cleanTarget)) ||
+          (cleanE.isNotEmpty && cleanE.endsWith(cleanTarget.length >= 8 ? cleanTarget.substring(cleanTarget.length - 8) : cleanTarget))) {
+        return p;
+      }
+    }
+    return null;
+  }
+
+  @override
   Future<void> deletePatient(String id) async {
     await Future.delayed(const Duration(milliseconds: 300));
     _patients.removeWhere((p) => p.id == id);
   }
 }
+

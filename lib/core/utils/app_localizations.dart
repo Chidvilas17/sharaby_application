@@ -217,8 +217,21 @@ class AppLocalizations {
       'appHelpHeaderTitle': 'App Usage Help',
       'appHelpHeaderSubtitle': 'Select a guide or search to learn how to use Sharaby Center features.',
       'searchAppHelpPlaceholder': 'Search app guides (e.g., add patient, Rx)...',
+      // Patient Call Identification
+      'callIdentificationTitle': 'Patient Call Identification',
+      'callIdentificationSubtitle': 'Identify incoming and missed calls from registered pediatric patients',
+      'callPermissionExplainTitle': 'Call Identification Permission Required',
+      'callPermissionExplainDesc': 'Sharaby Center Clinic uses call log information to identify registered pediatric patients and link missed calls to their medical records.',
+      'grantPermissionButton': 'Grant Permission',
+      'openAppSettings': 'Open Settings',
+      'permissionDeniedWarning': 'Call Identification is disabled until call log permission is granted.',
+      'missedCallTitle': 'Missed Patient Call',
+      'missedCallBody': 'missed a call. Tap to view patient details.',
+      'unknownCaller': 'Unknown Caller',
+      'tapToViewPatient': 'Tap to view patient record',
     },
     'ar': {
+
 
 
       'appName': 'مركز شرابي للأطفال',
@@ -426,8 +439,21 @@ class AppLocalizations {
       'appHelpHeaderTitle': 'دليل استخدام التطبيق',
       'appHelpHeaderSubtitle': 'اختر دليلاً أو ابحث لمعرفة كيفية استخدام ميزات مركز شرابي للأطفال.',
       'searchAppHelpPlaceholder': 'البحث في دليل الاستخدام (إضافة مريض، روشتة)...',
+      // Patient Call Identification
+      'callIdentificationTitle': 'التعرف على مكالمات المرضى',
+      'callIdentificationSubtitle': 'التعرف على مكالمات المرضى المسجلين والمكالمات الفائتة',
+      'callPermissionExplainTitle': 'إذن التعرف على مكالمات المرضى مطلوب',
+      'callPermissionExplainDesc': 'يستخدم مركز شرابي سجل المكالمات للتعرف على المرضى المسجلين وربط المكالمات الفائتة بسجلاتهم الطبية.',
+      'grantPermissionButton': 'السماح بالإذن',
+      'openAppSettings': 'فتح الإعدادات',
+      'permissionDeniedWarning': 'خاصية التعرف على المكالمات معطلة لحين منح الإذن.',
+      'missedCallTitle': 'مكالمة فائتة من مريض',
+      'missedCallBody': 'فاتت مكالمة منه. اضغط لعرض بيانات المريض.',
+      'unknownCaller': 'مكالمة من رقم غير مسجل',
+      'tapToViewPatient': 'اضغط لعرض ملف المريض',
     },
   };
+
 
 
 

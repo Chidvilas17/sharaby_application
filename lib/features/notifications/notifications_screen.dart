@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/utils/app_localizations.dart';
+import '../../shared/repositories/patient_repository.dart';
 import '../../shared/widgets/animated_glass_background.dart';
 import '../../shared/widgets/custom_app_bar.dart';
 import '../../shared/widgets/notification_card.dart';
+import '../call_identification/call_identification_service.dart';
+import '../patients/patient_detail_screen.dart';
 
-/// Notifications Screen with timeline cards and filter options
+/// Notifications Screen with timeline cards, missed call alerts, and filter options
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
 
@@ -15,8 +18,20 @@ class NotificationsScreen extends StatefulWidget {
 
 class _NotificationsScreenState extends State<NotificationsScreen> {
   int _selectedFilter = 0; // 0 = All, 1 = Unread
+  final PatientRepository _patientRepository = MockPatientRepository();
+  final CallIdentificationService _callService = CallIdentificationService();
 
   final List<Map<String, dynamic>> _notifications = [
+    {
+      'id': 'call_adam_001',
+      'title': 'Missed Patient Call',
+      'message': 'Adam Mohamed missed a call. Tap to view patient details.',
+      'time': 'Just now',
+      'icon': Icons.phone_missed_rounded,
+      'color': AppColors.error,
+      'isRead': false,
+      'patientId': 'P1001',
+    },
     {
       'id': '1',
       'title': 'New Pediatric Patient Registered',
@@ -53,17 +68,42 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       'color': AppColors.success,
       'isRead': true,
     },
-    {
-      'id': '5',
-      'title': 'Child Growth Record Updated',
-      'message': 'Nour Hassan\'s weight (8.5 kg) and height (71 cm) updated.',
-      'time': 'Yesterday',
-      'icon': Icons.show_chart_rounded,
-      'color': AppColors.warning,
-      'isRead': true,
-    },
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    _syncCallLog();
+  }
+
+  Future<void> _syncCallLog() async {
+    final events = await _callService.syncMissedCalls(_patientRepository);
+    if (events.isNotEmpty && mounted) {
+      final loc = AppLocalizations.of(context);
+      setState(() {
+        for (final ev in events) {
+          final isMatched = ev.patientId != null;
+          final title = isMatched
+              ? loc.translate('missedCallTitle')
+              : loc.translate('unknownCaller');
+          final message = isMatched
+              ? '${ev.patientName} ${loc.translate('missedCallBody')}'
+              : '${loc.translate('unknownCaller')}: ${ev.phoneNumber}';
+
+          _notifications.insert(0, {
+            'id': ev.id,
+            'title': title,
+            'message': message,
+            'time': 'Just now',
+            'icon': isMatched ? Icons.phone_missed_rounded : Icons.phone_disabled_rounded,
+            'color': isMatched ? AppColors.error : AppColors.warning,
+            'isRead': false,
+            'patientId': ev.patientId,
+          });
+        }
+      });
+    }
+  }
 
   void _markAllAsRead() {
     final loc = AppLocalizations.of(context);
@@ -75,6 +115,31 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(loc.translate('markAllRead'))),
     );
+  }
+
+  Future<void> _handleNotificationTap(Map<String, dynamic> item) async {
+    setState(() {
+      item['isRead'] = true;
+    });
+
+    final patientId = item['patientId'] as String?;
+    if (patientId != null && patientId.isNotEmpty) {
+      final patient = await _patientRepository.getPatientById(patientId);
+      if (patient != null && mounted) {
+        Navigator.push(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, anim1, anim2) =>
+                PatientDetailScreen(
+                  patient: patient,
+                  onPatientUpdated: () {},
+                ),
+            transitionsBuilder: (context, anim1, anim2, child) =>
+                FadeTransition(opacity: anim1, child: child),
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -138,11 +203,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                             icon: item['icon'] as IconData,
                             iconColor: item['color'] as Color,
                             isRead: item['isRead'] as bool,
-                            onTap: () {
-                              setState(() {
-                                item['isRead'] = true;
-                              });
-                            },
+                            onTap: () => _handleNotificationTap(item),
                           );
                         },
                       ),
